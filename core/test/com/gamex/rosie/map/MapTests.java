@@ -2,7 +2,6 @@ package com.gamex.rosie.map;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
-import com.sun.tools.javac.comp.Check;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,7 +48,7 @@ public class MapTests {
 
             IWorldBody mockBody = mock(IWorldBody.class);
             Vector3 instantPos = new Vector3(1, 1, 0);
-            subject.putAtAbsolute(instantPos, mockBody);
+            subject.putAtAbsolute(mockBody, instantPos);
 
             // Act
             CheckResult result = subject.checkEmptyRelative(pos, relOffset);
