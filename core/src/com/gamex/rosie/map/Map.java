@@ -5,27 +5,30 @@ import com.gamex.rosie.common.IWorldBody;
 
 public class Map implements IMap {
 
+    private final int width;
+    private final int length;
+    private final int height;
+
     private final float tileSize;
     private final IWorldBody[][][] bodyMap;
 
     public Map(float tileSize, Vector3 mapSize) {
 
         this.tileSize = tileSize;
-        bodyMap = constructMap(mapSize);
-    }
 
-    private IWorldBody[][][] constructMap(Vector3 mapSize) {
+        width = (int) mapSize.x;
+        length = (int) mapSize.y;
+        height = (int) mapSize.z;
 
-        int width = (int) mapSize.x;
-        int length = (int) mapSize.y;
-        int height = (int) mapSize.z;
-
-        return new IWorldBody[width][length][height];
+        bodyMap = new IWorldBody[width][length][height];
     }
 
     public CheckResult checkEmptyRelative(Vector3 position, Vector3 relativeOffset) {
 
         Vector3 absolutePosition = position.add(relativeOffset);
+
+        if (!isAbsoluteInBounds(absolutePosition))
+            return CheckResult.OUT_OF_BOUNDS;
 
         if (getAtAbsolute(absolutePosition) != null)
             return CheckResult.OCCUPIED;
@@ -50,5 +53,16 @@ public class Map implements IMap {
         int z = (int) absolutePosition.z;
 
         return bodyMap[x][y][z];
+    }
+
+    private boolean isAbsoluteInBounds(Vector3 absolutePosition) {
+
+        int x = (int) absolutePosition.x;
+        int y = (int) absolutePosition.y;
+        int z = (int) absolutePosition.z;
+
+        return x >= 0 && x < width &&
+                y >= 0 && y < length &&
+                z >= 0 && z < height;
     }
 }
