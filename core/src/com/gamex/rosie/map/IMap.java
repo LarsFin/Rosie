@@ -9,5 +9,6 @@ public interface IMap {
 enum CheckResult {
 
     EMPTY,
-    OCCUPIED
+    OCCUPIED,
+    OUT_OF_BOUNDS
 }

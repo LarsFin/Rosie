@@ -2,6 +2,7 @@ package com.gamex.rosie.map;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
+import com.sun.tools.javac.comp.Check;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -55,6 +56,22 @@ public class MapTests {
 
             // Assert
             assertEquals(CheckResult.OCCUPIED, result);
+        }
+
+        @Test
+        @DisplayName("Checking a location outside map returns out of bounds check")
+        public void relativeOutOfBoundsCheck()
+        {
+
+            // Arrange
+            Vector3 pos = new Vector3(1, 1, 1);
+            Vector3 relOffset = new Vector3(0, 0, -2);
+
+            // Act
+            CheckResult result = subject.checkEmptyRelative(pos, relOffset);
+
+            // Assert
+            assertEquals(CheckResult.OUT_OF_BOUNDS, result);
         }
     }
 }
