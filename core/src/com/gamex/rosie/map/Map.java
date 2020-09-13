@@ -25,6 +25,11 @@ public class Map implements IMap {
 
     public CheckResult checkEmptyRelative(Vector3 position, Vector3 relativeOffset) {
 
+        Vector3 absolutePosition = position.add(relativeOffset);
+
+        if (getAtAbsolute(absolutePosition) != null)
+            return CheckResult.OCCUPIED;
+
         return CheckResult.EMPTY;
     }
 
@@ -36,5 +41,14 @@ public class Map implements IMap {
 
         bodyMap[x][y][z] = worldBody;
         worldBody.setWorldPosition(position);
+    }
+
+    private IWorldBody getAtAbsolute(Vector3 absolutePosition) {
+
+        int x = (int) absolutePosition.x;
+        int y = (int) absolutePosition.y;
+        int z = (int) absolutePosition.z;
+
+        return bodyMap[x][y][z];
     }
 }
