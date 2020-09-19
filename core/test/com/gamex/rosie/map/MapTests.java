@@ -5,7 +5,9 @@ import com.gamex.rosie.common.IWorldBody;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 public class MapTests {
 
@@ -71,6 +73,30 @@ public class MapTests {
 
             // Assert
             assertEquals(CheckResult.OUT_OF_BOUNDS, result);
+        }
+    }
+
+    @Nested
+    @DisplayName("Tests for putting a world body in an absolute position")
+    public class PutAtAbsoluteTests {
+
+        @Test
+        @DisplayName("Ensure world body is put at absolute position")
+        public void IsPutAtAbsolutePosition() {
+
+            // Arrange
+            Vector3 position = new Vector3(1, 1, 1);
+            IWorldBody mockBody = mock(IWorldBody.class);
+
+            // Assert
+            assertNull(subject.getAtAbsolute(position));
+
+            // Act
+            subject.putAtAbsolute(mockBody, position);
+
+            // Assert
+            verify(mockBody).setWorldPosition(position);
+            assertEquals(mockBody, subject.getAtAbsolute(position));
         }
     }
 }
