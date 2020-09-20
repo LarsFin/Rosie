@@ -73,24 +73,18 @@ public class Map implements IMap {
 
         Vector3 position = worldBody.getWorldPosition();
 
-        int x = (int) (position.x + relativePosition.x);
-        int y = (int) (position.y + relativePosition.y);
-        int z = (int) position.z;
+        Vector3 absolutePosition = Vectors.add(position, relativePosition);
 
-        bodyMap[x][y][z] = worldBody;
-        worldBody.setWorldPosition(new Vector3(x, y, z));
+        putAtAbsolute(worldBody, absolutePosition);
     }
 
     public void putAtRelative(IWorldBody worldBody, Vector3 relativePosition) {
 
         Vector3 position = worldBody.getWorldPosition();
 
-        int x = (int) (position.x + relativePosition.x);
-        int y = (int) (position.y + relativePosition.y);
-        int z = (int) (position.z + relativePosition.z);
+        Vector3 absolutePosition = Vectors.add(position, relativePosition);
 
-        bodyMap[x][y][z] = worldBody;
-        worldBody.setWorldPosition(new Vector3(x, y, z));
+        putAtAbsolute(worldBody, absolutePosition);
     }
 
     private boolean isAbsoluteInBounds(Vector3 absolutePosition) {

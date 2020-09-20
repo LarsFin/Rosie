@@ -77,7 +77,17 @@ public class WorldBodyTests {
         @DisplayName("World body should not move to relative position when occupied")
         public void notMoveToRelativePositionWhenOccupied() {
 
+            // Arrange
+            Vector3 basePosition = Vector3.Zero;
+            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
+            Vector2 movement = _2dDirections.get(direction);
+            when(mockMap.checkEmptyRelative(basePosition, movement)).thenReturn(CheckResult.OCCUPIED);
 
+            // Act
+            subject.move(direction);
+
+            // Assert
+            verify(mockMap, times(0)).putAtRelative(subject, movement);
         }
 
         @Test
