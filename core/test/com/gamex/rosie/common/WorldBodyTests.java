@@ -1,10 +1,12 @@
 package com.gamex.rosie.common;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.map.CheckResult;
 import com.gamex.rosie.map.IMap;
 import org.junit.jupiter.api.*;
 
+import static com.gamex.rosie.common.WorldConstants._2dDirections;
 import static com.gamex.rosie.common.WorldConstants._3dDirections;
 import static org.mockito.Mockito.*;
 
@@ -47,6 +49,42 @@ public class WorldBodyTests {
             // Assert
             Vector3 expected3dDirection = _3dDirections.get(WorldConstants._3dDirection.DOWN);
             verify(mockMap, times(2)).putAtRelative(subject, expected3dDirection);
+        }
+    }
+
+    @Nested
+    @DisplayName("Tests for the movement of a world body")
+    public class MoveTests {
+
+        @Test
+        @DisplayName("World body should move to relative position when empty")
+        public void moveToRelativePositionWhenEmpty() {
+
+            // Arrange
+            Vector3 basePosition = Vector3.Zero;
+            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
+            Vector2 movement = _2dDirections.get(direction);
+            when(mockMap.checkEmptyRelative(basePosition, movement)).thenReturn(CheckResult.EMPTY);
+
+            // Act
+            subject.move(direction);
+
+            // Assert
+            verify(mockMap).putAtRelative(subject, movement);
+        }
+
+        @Test
+        @DisplayName("World body should not move to relative position when occupied")
+        public void notMoveToRelativePositionWhenOccupied() {
+
+
+        }
+
+        @Test
+        @DisplayName("World body should not move to relative position when out of bounds")
+        public void notMoveToRelativePositionWhenOutOfBounds() {
+
+
         }
     }
 }

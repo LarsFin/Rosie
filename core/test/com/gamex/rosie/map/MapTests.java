@@ -113,7 +113,7 @@ public class MapTests {
             Vector3 currentPosition = new Vector3(1, 1, 1);
             Vector3 expected = Vectors.add(currentPosition, relativePosition);
             IWorldBody mockBody = mock(IWorldBody.class);
-            doReturn(currentPosition).when(mockBody).getPosition();
+            doReturn(currentPosition).when(mockBody).getWorldPosition();
 
             // Act
             subject.putAtRelative(mockBody, relativePosition);

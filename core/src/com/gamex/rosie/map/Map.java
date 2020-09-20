@@ -1,7 +1,9 @@
 package com.gamex.rosie.map;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
+import com.gamex.rosie.math.Vectors;
 
 public class Map implements IMap {
 
@@ -23,14 +25,26 @@ public class Map implements IMap {
         bodyMap = new IWorldBody[width][length][height];
     }
 
+    public CheckResult checkEmptyRelative(Vector3 position, Vector2 relativeOffset) {
+
+        Vector3 absolutePosition = Vectors.add(position, relativeOffset);
+
+        return checkEmptyAbsolute(absolutePosition);
+    }
+
     public CheckResult checkEmptyRelative(Vector3 position, Vector3 relativeOffset) {
 
-        Vector3 absolutePosition = position.add(relativeOffset);
+        Vector3 absolutePosition = Vectors.add(position, relativeOffset);
 
-        if (!isAbsoluteInBounds(absolutePosition))
+        return checkEmptyAbsolute(absolutePosition);
+    }
+
+    public CheckResult checkEmptyAbsolute(Vector3 position) {
+
+        if (!isAbsoluteInBounds(position))
             return CheckResult.OUT_OF_BOUNDS;
 
-        if (getAtAbsolute(absolutePosition) != null)
+        if (getAtAbsolute(position) != null)
             return CheckResult.OCCUPIED;
 
         return CheckResult.EMPTY;
@@ -55,9 +69,21 @@ public class Map implements IMap {
         worldBody.setWorldPosition(position);
     }
 
+    public void putAtRelative(IWorldBody worldBody, Vector2 relativePosition) {
+
+        Vector3 position = worldBody.getWorldPosition();
+
+        int x = (int) (position.x + relativePosition.x);
+        int y = (int) (position.y + relativePosition.y);
+        int z = (int) position.z;
+
+        bodyMap[x][y][z] = worldBody;
+        worldBody.setWorldPosition(new Vector3(x, y, z));
+    }
+
     public void putAtRelative(IWorldBody worldBody, Vector3 relativePosition) {
 
-        Vector3 position = worldBody.getPosition();
+        Vector3 position = worldBody.getWorldPosition();
 
         int x = (int) (position.x + relativePosition.x);
         int y = (int) (position.y + relativePosition.y);

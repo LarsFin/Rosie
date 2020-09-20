@@ -13,7 +13,7 @@ public class WorldBody implements IWorldBody {
         this.map = map;
     }
 
-    public Vector3 getPosition() {
+    public Vector3 getWorldPosition() {
 
         return worldPosition;
     }
@@ -31,5 +31,10 @@ public class WorldBody implements IWorldBody {
     public void setWorldPosition(Vector3 worldPosition) {
 
         this.worldPosition = worldPosition;
+    }
+
+    public void move(WorldConstants._2dDirection direction) {
+
+
     }
 }
