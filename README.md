@@ -40,3 +40,9 @@ A light version of the standard block.
 - Any number of paper blocks can be pushed together.
 - A reverted paper block will not push another paper block, standard block or the player's character.
 - Will be crushed when a standard block reverts against it into a wall.
+
+#### Magnet Block
+
+Acts identically to the Standard Block but has extended behaviour.
+- When a Magnet Block connects with another magnet block; it joins to form one element within the world.
+- When magnetizing, memory which related to each separate entity is overlapped.
