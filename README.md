@@ -4,7 +4,7 @@ A 2D block pushing game with a mechanic to add complexity and a new approach to 
 
 <div align="center">
 
-![1st level design](img/examples/level_design_00.png)
+![1st level design](img/examples/first_level/00.jpg)
 
 *Figure a.1: First Level Design*
 
