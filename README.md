@@ -2,9 +2,9 @@
 
 A 2D block pushing game with a mechanic to add complexity and a new approach to the genre. While the game is two dimensional, it is based within a three dimensional field; bearing the x, y & z coordinates. The added mechanic is the ability to revert an action which the player had made. This action only occurs from blocks pushed by the player. The design of the first level has been laid out below.
 
-<div style="text-align:center">
+<div align="center">
 
-![1st level design](img/level_design_00.png)
+![1st level design](img/examples/level_design_00.png)
 
 *Figure a.1: First Level Design*
 
@@ -28,9 +28,9 @@ The game will follow a strict event cycle which **will not** be broken. This is 
 
 A block's size should be varied, allowing for greater flexibility in design. For this reason; a block cannot have its location pointed to one coordinate on the map. Instead, each space of the 3D map which is taken by the block should be considered as its coordinates. When a block moves, each of its coordinates should be updated as well as asserted to ensure it can be updated. Look at the example diagram below;
 
-<div style="text-align:center">
+<div align="center">
 
-![Block Layout ex1](img/block_sample_00.jpg)
+![Block Layout ex1](img/examples/block_sample_00.jpg)
 
 *Figure b.1: Initial Map Position*
 
@@ -55,9 +55,9 @@ Again, check whether p2 is valid
 
 Looking at the map we know the `p2` positions to be transformed to are valid as they are empty and within the bounds of the map. Therefore, the Standard Block can move north within our map. Now, we have the map below;
 
-<div style="text-align:center">
+<div align="center">
 
-![Block Layout ex1](img/block_sample_01.jpg)
+![Block Layout ex1](img/examples/block_sample_01.jpg)
 
 *Figure b.2: New Map Position*
 
@@ -75,27 +75,75 @@ While being the ordinary of the game, it still has some features which are worth
 
 1. Can be pushed by the player's character.
 
-<div style="text-align:center">
+<div align="center">
 
-![Standard Block Movement](img/standard_block_00.jpg)
+![Standard Block Movement](img/examples/standard_block/00.jpg)
 
 *Figure c.1: Standard Block Movement*
 
 </div>
 
 2. Two standard blocks cannot be pushed in their connected direction.
+
+<div align="center">
+
+![Standard Block Invalid Movement Another Block](img/examples/standard_block/02.jpg)
+
+*Figure c.2: Standard Block Invalid Connected Block Movement*
+
+</div>
+
 3. When a standard block's push has been reverted; it will push the character.
+
+<div align="center">
+
+![Standard Block Reverted Against Player](img/examples/standard_block/03.jpg)
+
+*Figure c.3: Standard Block Reverted Against Player*
+
+</div>
+
 4. A standard block being reverted against the player's character into a wall will kill them.
+
+<div align="center">
+
+![Standard Block Reverted To Kill Player](img/examples/standard_block/04.jpg)
+
+*Figure c.4: Standard Block Reverted Onto Player Against Wall*
+
+</div>
+
 5. A standard block being reverted against another standard block will push it but not when towards a wall.
+
+<div align="center">
+
+![Standard Block Reverted Against Standard Block](img/examples/standard_block/05.jpg)
+
+*Figure c.5: Standard Block Reverted Against Another Standard Block*
+
+![Standard Block Invalid Reversion Into Wall](img/examples/standard_block/06.jpg)
+
+*Figure c.6: Standard Block Invalid Inversion Against Wall*
+
+</div>
+
 6. If a Standard Block is to fall on the player's character, it will kill them.
+
+<div align="center">
+
+![Standard Block Falling Onto Player](img/examples/standard_block/07.jpg)
+
+*Figure c.7: Standard Block Falling Onto Player*
+
+</div>
 
 7. A Standard Block cannot be pushed into a wall
 
-<div style="text-align:center">
+<div align="center">
 
-![Standard Block Invalid Movement](img/standard_block_01.jpg)
+![Standard Block Invalid Movement Into Wall](img/examples/standard_block/01.jpg)
 
-*Figure c.2: Standard Block Invalid Wall Movement*
+*Figure c.8: Standard Block Invalid Wall Movement*
 
 </div>
 
