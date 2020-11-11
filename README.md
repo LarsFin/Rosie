@@ -150,11 +150,82 @@ While being the ordinary of the game, it still has some features which are worth
 #### **Paper Block**
 
 A light version of the standard block.
-- Can be pushed by the player's character.
-- Any number of paper blocks can be pushed together.
-- A reverted paper block will not push another paper block, standard block or the player's character.
-- Will be crushed when a standard block reverts against it into a wall.
-- If a Paper Block is to fall on the player's character, it will remain above them until the character's player moves away and a 'physics update' is performed.
+
+1. Can be pushed by the player's character.
+
+<div align="center">
+
+![Paper Block Pushed](img/examples/paper_block/00.jpg)
+
+*Figure d.1: Paper Block pushed by Player's Character*
+
+</div>
+
+2. Any number of paper blocks can be pushed together.
+
+<div align="center">
+
+![Many Paper Blocks Pushed](img/examples/paper_block/01.jpg)
+
+*Figure d.2: Many Paper Blocks pushed by Player's Character*
+
+</div>
+
+3. A reverted paper block will push one or more other paper blocks but not a standard block or the player's character.
+
+<div align="center">
+
+![Multiple Paper Blocks Reverted](img/examples/paper_block/02.jpg)
+
+*Figure d.3a: Paper Block reverting onto another Paper Block*
+
+</div>
+
+<div align="center">
+
+![Paper Block Invalid Reversion on Standard Block](img/examples/paper_block/03.jpg)
+
+*Figure d.3b: Paper Block Invalid Reversion onto Standard Block*
+
+</div>
+
+<div align="center">
+
+![Paper Block Invalid Reversion on Player's Character](img/examples/paper_block/04.jpg)
+
+*Figure d.3c: Paper Block Invalid Reversion onto Player's Character*
+
+</div>
+
+4. Will be crushed when a standard block is pushed against it into a wall.
+
+<div align="center">
+
+![Paper Block Crushed by Pushed Standard Block](img/examples/paper_block/05.jpg)
+
+*Figure d.4: Paper Block crushed by pushed Standard Block*
+
+</div>
+
+5. Will be crushed when a standard block reverts against it into a wall.
+
+<div align="center">
+
+![Paper Block Crushed by Reverted Standard Block](img/examples/paper_block/06.jpg)
+
+*Figure d.5: Paper Block crushed by reverted Standard Block*
+
+</div>
+
+6. If a Paper Block is to fall on the player's character, it will remain above them until the character's player moves away and a 'physics update' is performed.
+
+<div align="center">
+
+![Paper Block held by Player's Character](img/examples/paper_block/07.jpg)
+
+*Figure d.3c: Paper Block above Player's Character and falling once Player's Character has Moved*
+
+</div>
 
 #### **Magnet Block**
 
