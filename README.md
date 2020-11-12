@@ -223,16 +223,59 @@ A light version of the standard block.
 
 ![Paper Block held by Player's Character](img/examples/paper_block/07.jpg)
 
-*Figure d.3c: Paper Block above Player's Character and falling once Player's Character has Moved*
+*Figure d.6: Paper Block above Player's Character and falling once Player's Character has Moved*
 
 </div>
 
 #### **Magnet Block**
 
 Acts identically to the Standard Block but has extended behaviour.
-- When a Magnet Block connects with another magnet block; it joins to form one element within the world.
-- When magnetizing, memory which related to each separate entity is overlapped.
-- Even when magnetized to form a larger entity, it still will act the same as the standard block in core behaviour.
+
+1. When a Magnet Block comes in contact with another Magnet Block; it joins to form one element within the world.
+
+<div align="center">
+
+![Magnetic Block Connecting](img/examples/magnetic_block/00.jpg)
+
+*Figure e.1: Magnetic Block Connects when pushed into Contact*
+
+</div>
+
+2. When magnetizing, memory which related to each separate entity is overlapped.
+
+<div align="center">
+
+![Magnetic Blocks](img/examples/magnetic_block/01.jpg)
+
+*Figure e.2a: Magnetic Blocks*
+
+![First Magnetic Block pushed](img/examples/magnetic_block/02.jpg)
+
+*Figure e.2b: First Magnetic Block pushed*
+
+![Second Magnetic Block pushed](img/examples/magnetic_block/03.jpg)
+
+*Figure e.2c: Second Magnetic Block pushed and Connects with First*
+
+![Connected Magnetic Block Reverts Second](img/examples/magnetic_block/04.jpg)
+
+*Figure e.2d: Connected Magnetic Block reverts Second push*
+
+![Connected Magnetic Block Reverts First](img/examples/magnetic_block/05.jpg)
+
+*Figure e.2a: Connected Magnetic Block reverts First push afterwards*
+
+</div>
+
+3. Even when magnetized to form a larger entity, it still will act the same as the standard block in core behaviour.
+
+<div align="center">
+
+![Connected Magnetic Block Invalid Motion](img/examples/magnetic_block/06.jpg)
+
+*Figure e.3: Connected Magnetic Block cannot move due to connected portion*
+
+</div>
 
 #### **Goo Block**
 
