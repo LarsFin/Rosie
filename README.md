@@ -177,7 +177,7 @@ A light version of the standard block.
 
 ![Multiple Paper Blocks Reverted](img/examples/paper_block/02.jpg)
 
-*Figure d.3a: Paper Block reverting onto another Paper Block*
+*Figure d.3.i: Paper Block reverting onto another Paper Block*
 
 </div>
 
@@ -185,7 +185,7 @@ A light version of the standard block.
 
 ![Paper Block Invalid Reversion on Standard Block](img/examples/paper_block/03.jpg)
 
-*Figure d.3b: Paper Block Invalid Reversion onto Standard Block*
+*Figure d.3.ii: Paper Block Invalid Reversion onto Standard Block*
 
 </div>
 
@@ -193,7 +193,7 @@ A light version of the standard block.
 
 ![Paper Block Invalid Reversion on Player's Character](img/examples/paper_block/04.jpg)
 
-*Figure d.3c: Paper Block Invalid Reversion onto Player's Character*
+*Figure d.3.iii: Paper Block Invalid Reversion onto Player's Character*
 
 </div>
 
@@ -247,23 +247,23 @@ Acts identically to the Standard Block but has extended behaviour.
 
 ![Magnetic Blocks](img/examples/magnetic_block/01.jpg)
 
-*Figure e.2a: Magnetic Blocks*
+*Figure e.2.i: Magnetic Blocks*
 
 ![First Magnetic Block pushed](img/examples/magnetic_block/02.jpg)
 
-*Figure e.2b: First Magnetic Block pushed*
+*Figure e.2.ii: First Magnetic Block pushed*
 
 ![Second Magnetic Block pushed](img/examples/magnetic_block/03.jpg)
 
-*Figure e.2c: Second Magnetic Block pushed and Connects with First*
+*Figure e.2.iii: Second Magnetic Block pushed and Connects with First*
 
 ![Connected Magnetic Block Reverts Second](img/examples/magnetic_block/04.jpg)
 
-*Figure e.2d: Connected Magnetic Block reverts Second push*
+*Figure e.2.iv: Connected Magnetic Block reverts Second push*
 
 ![Connected Magnetic Block Reverts First](img/examples/magnetic_block/05.jpg)
 
-*Figure e.2a: Connected Magnetic Block reverts First push afterwards*
+*Figure e.2.v: Connected Magnetic Block reverts First push afterwards*
 
 </div>
 
@@ -280,16 +280,85 @@ Acts identically to the Standard Block but has extended behaviour.
 #### **Goo Block**
 
 A unique block which shares some similarish behaviours with the Magnet and Paper Block.
-- Can be pushed by the player's character.
-- When pushed against another goo block; it will form one larger goo block will moving in the pushed direction.
-- A large goo block will adjust its shape when only a portion of it can perform a transformation due to a map edge, wall or Standard Block (see images for clarity).
-- If a Goo Block falls on the player's character, they won't be hurt, but instead; will emerge from the top of the Goo Block.
-- A Goo Block being reverted against the player's character will cause the block to engulf the player's character and emit them at the top.
+
+1. Can be pushed by the player's character.
+
+<div align="center">
+
+![Goo Block Pushed](img/examples/goo_block/00.jpg)
+
+*Figure f.1: Goo Block pushed by Player's Character*
+
+</div>
+
+2. Two Magnetic Blocks combine after making contact. Two Goo Blocks must be pushed towards contact to form a larger Block (the resulting larger Goo Block will not move in this Action).
+
+<div align="center">
+
+![Goo Block Not Combining on Contact](img/examples/goo_block/01.jpg)
+
+*Figure f.2.i: Goo Block not combining on Contact*
+
+![Goo Block Combining on Push](img/examples/goo_block/02.jpg)
+
+*Figure f.2.ii: Goo Block combining on Push into Contact*
+
+</div>
+
+3. A large goo block will adjust its shape when only a portion of it can perform a transformation due to a map edge, wall or Standard Block (see images for clarity). However, the mutation is only made depending on where the Player's Character pushes from.
+
+<div align="center">
+
+![Large Goo Block Scenario](img/examples/goo_block/03.jpg)
+
+*Figure f.3.i: Goo Block which has been combined*
+
+![Large Goo Block not Updated when Pushed at Wall Side](img/examples/goo_block/04.jpg)
+
+*Figure f.3.ii: Combined Goo Block not mutating when pushed on side of Wall*
+
+![Large Goo Block Updated when Pushed at Free Side](img/examples/goo_block/05.jpg)
+
+*Figure f.3.iii: Combined Goo Block mutates shape when pushed on opposite side of Wall*
+
+</div>
+
+4. If a Goo Block falls on the player's character, they won't be hurt, but instead; will emerge from the top of the Goo Block.
+
+<div align="center">
+
+![Goo Block Falling onto Player's Character](img/examples/goo_block/06.jpg)
+
+*Figure f.4.i: Goo Block falling ont Player's Character*
+
+![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/07.jpg)
+
+*Figure f.4.ii: Player's Character emerges from top of fallen Goo Block*
+
+</div>
+
+5. A Goo Block being reverted against the player's character will cause the block to engulf the player's character and emit them at the top.
+
+<div align="center">
+
+![Goo Block Reverted over Player's Character](img/examples/goo_block/08.jpg)
+
+*Figure f.5.i: Goo Block reverted over Player's Character*
+
+![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/09.jpg)
+
+*Figure f.5.ii: Players' Character emerges from top of fallen Goo Block*
+
+</div>
 
 #### **Temple Block (Better Name TBD)**
 
 Very different in behaviour to Standard Blocks.
-- Cannot be pushed by the player's character.
-- Gravity is not applied to these blocks and they can remain in the air.
-- When the player presses the action button while facing a Temple Block, the character is locked but has the ability to move the block in a 3-dimensional direction. That being UP, DOWN, LEFT or RIGHT. Left and Right being from the perspective of the player's character.
-- In terms of pushing, these blocks act the same as Standard Blocks. Meaning, they can't be pushed towards another Temple Block they are against or towards a wall.
+
+1. Cannot be pushed by the player's character.
+
+2. Gravity is not applied to these blocks and they can remain in the air.
+
+3. When the player presses the action button while facing a Temple Block, the character is locked but has the ability to move the block in a 3-dimensional direction. That being UP, DOWN, LEFT or RIGHT. Left and Right being from the perspective of the player's character.
+
+4. In terms of pushing, these blocks act the same as Standard Blocks. Meaning, they can't be pushed towards another Temple Block they are against or towards a wall.
