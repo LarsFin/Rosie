@@ -351,6 +351,12 @@ A unique block which shares some similarish behaviours with the Magnet and Paper
 
 </div>
 
+6. Goo Blocks can be combined vertically by them falling at least one block's height onto another Goo Block. Alternatively, if two Goo Blocks are towered, the Player's Character can walk atop them to force their combination.
+
+7. Emerging works on a set of priorities. If the space above the Player's Character is occupied when a Goo Block is reverted over them; another direction to emit the Player's Character must be decided. The priorities are **up**, **backward**, **forward**, **left**, **right**. Where directions are from the perspective of the Player's Character towards the reverted Goo Block.
+
+8. When a Goo Block is squashed with a Standard Block, it squeezes to the surface of the Standard Block. This is similar to how the Player's Character emerges from a Goo Block which has engulfed them. However, it is possible there is no direction the Goo Block could emerge, in this case; it is destroyed.
+
 #### **Temple Block (Better Name TBD)**
 
 Very different in behaviour to Standard Blocks.
