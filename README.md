@@ -327,13 +327,17 @@ A unique block which shares some similarish behaviours with the Magnet and Paper
 
 <div align="center">
 
-![Goo Block Falling onto Player's Character](img/examples/goo_block/06.jpg)
+![Goo Block Reverted above Player's Character](img/examples/goo_block/06.jpg)
 
-*Figure f.4.i: Goo Block falling ont Player's Character*
+*Figure f.4.i: Goo Block reverted above Player's Character*
 
-![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/07.jpg)
+![Goo Block Falling onto Player's Character](img/examples/goo_block/07.jpg)
 
-*Figure f.4.ii: Player's Character emerges from top of fallen Goo Block*
+*Figure f.4.ii: Goo Block falling onto Player's Character*
+
+![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/08.jpg)
+
+*Figure f.4.iii: Player's Character emerges from top of fallen Goo Block*
 
 </div>
 
@@ -341,21 +345,65 @@ A unique block which shares some similarish behaviours with the Magnet and Paper
 
 <div align="center">
 
-![Goo Block Reverted over Player's Character](img/examples/goo_block/08.jpg)
+![Goo Block Reverted onto Player's Character](img/examples/goo_block/09.jpg)
 
-*Figure f.5.i: Goo Block reverted over Player's Character*
+*Figure f.5.i: Goo Block reverted onto Player's Character*
 
-![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/09.jpg)
+![Player's Character emerging from Fallen Goo Block](img/examples/goo_block/10.jpg)
 
 *Figure f.5.ii: Players' Character emerges from top of fallen Goo Block*
 
 </div>
 
-6. Goo Blocks can be combined vertically by them falling at least one block's height onto another Goo Block. Alternatively, if two Goo Blocks are towered, the Player's Character can walk atop them to force their combination.
+6. Goo Blocks can be combined vertically by them falling at least one block's height onto another Goo Block. Alternatively, if two Goo Blocks are stacked, the Player's Character can walk atop them to force their combination.
+
+<div align="center">
+
+![Goo Block Pushed into Stack](img/examples/goo_block/11.jpg)
+
+*Figure f.6.i: Goo Block pushed onto Stack does not Combine*
+
+![Goo Block Falling onto Stack](img/examples/goo_block/12.jpg)
+
+*Figure f.6.ii: Goo Block falling onto Stack Combines*
+
+![Goo Block Stepped into Stack](img/examples/goo_block/13.jpg)
+
+*Figure f.6.iii: Walking atop Goo Block stack results in Combination*
+
+</div>
 
 7. Emerging works on a set of priorities. If the space above the Player's Character is occupied when a Goo Block is reverted over them; another direction to emit the Player's Character must be decided. The priorities are **up**, **backward**, **forward**, **left**, **right**. Where directions are from the perspective of the Player's Character towards the reverted Goo Block.
 
+<div align="center">
+
+![Player's Character Forced Backward](img/examples/goo_block/14.jpg)
+
+*Figure f.7.i: Player's Character forced Backward*
+
+![Player's Character Forced Forward on Large Block](img/examples/goo_block/15.jpg)
+
+*Figure f.7.ii: Player's Character forced Forward on longer Goo Block*
+
+</div>
+
 8. When a Goo Block is squashed with a Standard Block, it squeezes to the surface of the Standard Block. This is similar to how the Player's Character emerges from a Goo Block which has engulfed them. However, it is possible there is no direction the Goo Block could emerge, in this case; it is destroyed.
+
+<div align="center">
+
+![Goo Block Squashed to Surface](img/examples/goo_block/16.jpg)
+
+*Figure f.8.i: Crushed Goo Block is pushed to Surface*
+
+![Goo Block Forced Right when Squashed](img/examples/goo_block/17.jpg)
+
+*Figure f.8.ii: Crushed Goo Block is forced Right*
+
+![Goo Block Destroyed when Squashed with no Available Option](img/examples/goo_block/18.jpg)
+
+*Figure f.8.iii: Crushed Goo Block destroyed when no available Options exist*
+
+</div>
 
 #### **Temple Block (Better Name TBD)**
 
