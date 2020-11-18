@@ -2,6 +2,7 @@ package com.gamex.rosie.map;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
+import com.gamex.rosie.logging.ILogger;
 import com.gamex.rosie.math.Vectors;
 import org.junit.jupiter.api.*;
 
@@ -18,7 +19,9 @@ public class MapTests {
 
         float tileSize = 16;
         Vector3 v3 = new Vector3(3, 3, 3);
-        subject = new Map(tileSize, v3);
+        ILogger mockLogger = mock(ILogger.class);
+
+        subject = new Map(tileSize, v3, mockLogger);
     }
 
     @Nested

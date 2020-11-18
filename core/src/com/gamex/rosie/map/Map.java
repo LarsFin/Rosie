@@ -3,7 +3,11 @@ package com.gamex.rosie.map;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
+import com.gamex.rosie.logging.ILogger;
+import com.gamex.rosie.logging.LogLevel;
 import com.gamex.rosie.math.Vectors;
+
+import static com.gamex.rosie.logging.Messages.Map.Error;
 
 public class Map implements IMap {
 
@@ -13,10 +17,12 @@ public class Map implements IMap {
 
     private final float tileSize;
     private final IWorldBody[][][] bodyMap;
+    private final ILogger logger;
 
-    public Map(float tileSize, Vector3 mapSize) {
+    public Map(float tileSize, Vector3 mapSize, ILogger logger) {
 
         this.tileSize = tileSize;
+        this.logger = logger;
 
         width = (int) mapSize.x;
         length = (int) mapSize.y;
@@ -67,6 +73,48 @@ public class Map implements IMap {
 
         bodyMap[x][y][z] = worldBody;
         worldBody.setWorldPosition(position);
+    }
+
+    public void putAtAbsolute(IWorldBody worldBody, Vector3[] positions) {
+
+        Vector3[] currentPositions = worldBody.getWorldPositions();
+
+        if (currentPositions.length != positions.length) {
+
+            logger.Log(LogLevel.ERROR, Error.InvalidAbsolutePositionSet(currentPositions.length, positions.length));
+            return;
+        }
+
+        for (Vector3 position : positions) {
+
+            int x = (int) position.x;
+            int y = (int) position.y;
+            int z = (int) position.z;
+
+            bodyMap[x][y][z] = worldBody;
+        }
+
+        worldBody.setWorldPositions(positions);
+    }
+
+    public void putAtRelatives(IWorldBody worldBody, Vector2 relativePosition) {
+
+        Vector3 relativePosition3 = new Vector3(relativePosition.x, relativePosition.y, 0);
+        putAtRelatives(worldBody, relativePosition3);
+    }
+
+    public void putAtRelatives(IWorldBody worldBody, Vector3 relativePosition) {
+
+        Vector3[] positions = worldBody.getWorldPositions();
+
+        Vector3[] absolutePositions = new Vector3[positions.length];
+
+        for (int i = 0; i < absolutePositions.length; i++) {
+
+            absolutePositions[i] = Vectors.add(positions[i], relativePosition);
+        }
+
+        putAtAbsolute(worldBody, absolutePositions);
     }
 
     public void putAtRelative(IWorldBody worldBody, Vector2 relativePosition) {

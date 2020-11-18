@@ -20,8 +20,9 @@ public class WorldBodyTests {
     public void beforeEach() {
 
         mockMap = mock(IMap.class);
+        Vector3[] startPosition = { Vector3.Zero };
 
-        subject = new WorldBody(mockMap);
+        subject = new WorldBody(mockMap, startPosition);
     }
 
     @Nested

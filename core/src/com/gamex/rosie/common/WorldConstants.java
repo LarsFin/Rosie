@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.HashMap;
 
 public final class WorldConstants {
+
     public enum _2dDirection {
 
         UP,
