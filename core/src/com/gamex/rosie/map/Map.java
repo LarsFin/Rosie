@@ -15,6 +15,7 @@ public class Map implements IMap {
     private final int length;
     private final int height;
 
+
     private final float tileSize;
     private final IWorldBody[][][] bodyMap;
     private final ILogger logger;
@@ -65,19 +66,9 @@ public class Map implements IMap {
         return bodyMap[x][y][z];
     }
 
-    public void putAtAbsolute(IWorldBody worldBody, Vector3 position) {
-
-        int x = (int) position.x;
-        int y = (int) position.y;
-        int z = (int) position.z;
-
-        bodyMap[x][y][z] = worldBody;
-        worldBody.setWorldPosition(position);
-    }
-
     public void putAtAbsolute(IWorldBody worldBody, Vector3[] positions) {
 
-        Vector3[] currentPositions = worldBody.getWorldPositions();
+        Vector3[] currentPositions = worldBody.getWorldPosition();
 
         if (currentPositions.length != positions.length) {
 
@@ -94,18 +85,18 @@ public class Map implements IMap {
             bodyMap[x][y][z] = worldBody;
         }
 
-        worldBody.setWorldPositions(positions);
+        worldBody.setWorldPosition(positions);
     }
 
-    public void putAtRelatives(IWorldBody worldBody, Vector2 relativePosition) {
+    public void putAtRelative(IWorldBody worldBody, Vector2 relativePosition) {
 
         Vector3 relativePosition3 = new Vector3(relativePosition.x, relativePosition.y, 0);
-        putAtRelatives(worldBody, relativePosition3);
+        putAtRelative(worldBody, relativePosition3);
     }
 
-    public void putAtRelatives(IWorldBody worldBody, Vector3 relativePosition) {
+    public void putAtRelative(IWorldBody worldBody, Vector3 relativePosition) {
 
-        Vector3[] positions = worldBody.getWorldPositions();
+        Vector3[] positions = worldBody.getWorldPosition();
 
         Vector3[] absolutePositions = new Vector3[positions.length];
 
@@ -115,24 +106,6 @@ public class Map implements IMap {
         }
 
         putAtAbsolute(worldBody, absolutePositions);
-    }
-
-    public void putAtRelative(IWorldBody worldBody, Vector2 relativePosition) {
-
-        Vector3 position = worldBody.getWorldPosition();
-
-        Vector3 absolutePosition = Vectors.add(position, relativePosition);
-
-        putAtAbsolute(worldBody, absolutePosition);
-    }
-
-    public void putAtRelative(IWorldBody worldBody, Vector3 relativePosition) {
-
-        Vector3 position = worldBody.getWorldPosition();
-
-        Vector3 absolutePosition = Vectors.add(position, relativePosition);
-
-        putAtAbsolute(worldBody, absolutePosition);
     }
 
     private boolean isAbsoluteInBounds(Vector3 absolutePosition) {

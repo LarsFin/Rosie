@@ -4,9 +4,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public interface IWorldBody {
 
-    Vector3 getWorldPosition();
-    Vector3[] getWorldPositions();
+    Vector3[] getWorldPosition();
     void gravityUpdate();
-    void setWorldPosition(Vector3 worldPosition);
-    void setWorldPositions(Vector3[] worldPositions);
+    void setWorldPosition(Vector3[] worldPositions);
 }

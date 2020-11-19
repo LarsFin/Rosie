@@ -4,12 +4,9 @@ import com.badlogic.gdx.math.Vector3;
 
 public final class WorldPhysics {
 
-    private static WorldConstants._3dDirection gravityDirection;
+    private static WorldConstants._3dDirection gravityDirection = WorldConstants._3dDirection.DOWN;
 
-    private WorldPhysics() {
-
-        gravityDirection = WorldConstants._3dDirection.DOWN;
-    }
+    private WorldPhysics() {}
 
     public static WorldConstants._3dDirection getGravityDirection() {
 

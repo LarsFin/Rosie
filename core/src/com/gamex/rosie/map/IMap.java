@@ -8,7 +8,7 @@ public interface IMap {
     CheckResult checkEmptyRelative(Vector3 position, Vector2 relativeOffset);
     CheckResult checkEmptyRelative(Vector3 position, Vector3 relativeOffset);
     IWorldBody getAtAbsolute(Vector3 absolutePosition);
-    void putAtAbsolute(IWorldBody worldBody, Vector3 position);
+    void putAtAbsolute(IWorldBody worldBody, Vector3[] positions);
     void putAtRelative(IWorldBody worldBody, Vector2 relativePosition);
     void putAtRelative(IWorldBody worldBody, Vector3 relativePosition);
 }

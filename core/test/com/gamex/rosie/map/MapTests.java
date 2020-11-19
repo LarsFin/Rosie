@@ -52,8 +52,9 @@ public class MapTests {
             Vector3 relOffset = new Vector3(0, 0, -1);
 
             IWorldBody mockBody = mock(IWorldBody.class);
-            Vector3 instantPos = new Vector3(1, 1, 0);
-            subject.putAtAbsolute(mockBody, instantPos);
+            Vector3[] instantPositions = { Vectors.add(pos, relOffset) };
+            doReturn(new Vector3[1]).when(mockBody).getWorldPosition();
+            subject.putAtAbsolute(mockBody, instantPositions);
 
             // Act
             CheckResult result = subject.checkEmptyRelative(pos, relOffset);
@@ -89,16 +90,18 @@ public class MapTests {
 
             // Arrange
             Vector3 position = new Vector3(1, 1, 1);
+            Vector3[] positions = { position };
             IWorldBody mockBody = mock(IWorldBody.class);
+            doReturn(new Vector3[] { Vector3.Zero }).when(mockBody).getWorldPosition();
 
             // Assert
             assertNull(subject.getAtAbsolute(position));
 
             // Act
-            subject.putAtAbsolute(mockBody, position);
+            subject.putAtAbsolute(mockBody, positions);
 
             // Assert
-            verify(mockBody).setWorldPosition(position);
+            verify(mockBody).setWorldPosition(positions);
             assertEquals(mockBody, subject.getAtAbsolute(position));
         }
     }
@@ -113,8 +116,8 @@ public class MapTests {
 
             // Arrange
             Vector3 relativePosition = new Vector3(0, -1, 0);
-            Vector3 currentPosition = new Vector3(1, 1, 1);
-            Vector3 expected = Vectors.add(currentPosition, relativePosition);
+            Vector3[] currentPosition = { new Vector3(1, 1, 1) };
+            Vector3[] expected = { new Vector3(1, 0, 1) };
             IWorldBody mockBody = mock(IWorldBody.class);
             doReturn(currentPosition).when(mockBody).getWorldPosition();
 
@@ -123,7 +126,7 @@ public class MapTests {
 
             // Assert
             verify(mockBody).setWorldPosition(expected);
-            assertEquals(mockBody, subject.getAtAbsolute(expected));
+            assertEquals(mockBody, subject.getAtAbsolute(expected[0]));
         }
     }
 }

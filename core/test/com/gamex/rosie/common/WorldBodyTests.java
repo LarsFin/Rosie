@@ -7,7 +7,6 @@ import com.gamex.rosie.map.IMap;
 import org.junit.jupiter.api.*;
 
 import static com.gamex.rosie.common.WorldConstants._2dDirections;
-import static com.gamex.rosie.common.WorldConstants._3dDirections;
 import static org.mockito.Mockito.*;
 
 public class WorldBodyTests {
@@ -20,9 +19,9 @@ public class WorldBodyTests {
     public void beforeEach() {
 
         mockMap = mock(IMap.class);
-        Vector3[] startPosition = { Vector3.Zero };
+        Vector3[] startPositions = { Vector3.Zero, Vector3.X, Vector3.Z };
 
-        subject = new WorldBody(mockMap, startPosition);
+        subject = new WorldBody(mockMap, startPositions);
     }
 
     @Nested
@@ -34,12 +33,16 @@ public class WorldBodyTests {
         public void fallUntilGrounded() {
 
             // Arrange
-            Vector3 basePosition = Vector3.Zero;
-            Vector3 offset = _3dDirections.get(WorldConstants._3dDirection.DOWN);
+            Vector3[] positions = subject.getWorldPosition();
+            Vector3 offset = WorldPhysics.getNormalGravity();
 
-            when(mockMap.checkEmptyRelative(basePosition, offset)).thenReturn(CheckResult.EMPTY)
+            when(mockMap.checkEmptyRelative(positions[0], offset)).thenReturn(CheckResult.EMPTY)
                     .thenReturn(CheckResult.EMPTY)
                     .thenReturn(CheckResult.OCCUPIED);
+
+            when(mockMap.checkEmptyRelative(positions[1], offset)).thenReturn(CheckResult.EMPTY);
+
+            when(mockMap.checkEmptyRelative(positions[2], offset)).thenReturn(CheckResult.OCCUPIED);
 
             // Act
             for (int i = 0; i < 3; i++) {
@@ -48,8 +51,7 @@ public class WorldBodyTests {
             }
 
             // Assert
-            Vector3 expected3dDirection = _3dDirections.get(WorldConstants._3dDirection.DOWN);
-            verify(mockMap, times(2)).putAtRelative(subject, expected3dDirection);
+            verify(mockMap, times(2)).putAtRelative(subject, offset);
         }
     }
 
@@ -62,10 +64,13 @@ public class WorldBodyTests {
         public void moveToRelativePositionWhenEmpty() {
 
             // Arrange
-            Vector3 basePosition = Vector3.Zero;
+            Vector3[] positions = subject.getWorldPosition();
             WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
             Vector2 movement = _2dDirections.get(direction);
-            when(mockMap.checkEmptyRelative(basePosition, movement)).thenReturn(CheckResult.EMPTY);
+
+            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.OCCUPIED);
+            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.EMPTY);
+            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.EMPTY);
 
             // Act
             subject.move(direction);
@@ -79,10 +84,13 @@ public class WorldBodyTests {
         public void notMoveToRelativePositionWhenOccupied() {
 
             // Arrange
-            Vector3 basePosition = Vector3.Zero;
+            Vector3[] positions = subject.getWorldPosition();
             WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
             Vector2 movement = _2dDirections.get(direction);
-            when(mockMap.checkEmptyRelative(basePosition, movement)).thenReturn(CheckResult.OCCUPIED);
+
+            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.OCCUPIED);
+            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.OCCUPIED);
+            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.EMPTY);
 
             // Act
             subject.move(direction);
@@ -95,7 +103,20 @@ public class WorldBodyTests {
         @DisplayName("World body should not move to relative position when out of bounds")
         public void notMoveToRelativePositionWhenOutOfBounds() {
 
+            // Arrange
+            Vector3[] positions = subject.getWorldPosition();
+            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
+            Vector2 movement = _2dDirections.get(direction);
 
+            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.EMPTY);
+            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.OCCUPIED);
+            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.OUT_OF_BOUNDS);
+
+            // Act
+            subject.move(direction);
+
+            // Assert
+            verify(mockMap, times(0)).putAtRelative(subject, movement);
         }
     }
 }
