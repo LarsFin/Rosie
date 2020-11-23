@@ -3,23 +3,26 @@ package com.gamex.rosie.map;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
 import com.gamex.rosie.logging.ILogger;
+import com.gamex.rosie.logging.LogLevel;
 import com.gamex.rosie.math.Vectors;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.mockito.Mockito.*;
+import static com.gamex.rosie.logging.Messages.Map.Error;
 
 public class MapTests {
 
     private Map subject;
+    private ILogger mockLogger;
 
     @BeforeEach
     public void beforeEach() {
 
         float tileSize = 16;
         Vector3 v3 = new Vector3(3, 3, 3);
-        ILogger mockLogger = mock(ILogger.class);
+        mockLogger = mock(ILogger.class);
 
         subject = new Map(tileSize, v3, mockLogger);
     }
@@ -84,6 +87,14 @@ public class MapTests {
     @DisplayName("Tests for putting a world body in an absolute position")
     public class PutAtAbsoluteTests {
 
+        IWorldBody mockBody;
+
+        @BeforeEach
+        public void beforeEach() {
+
+            mockBody = mock(IWorldBody.class);
+        }
+
         @Test
         @DisplayName("Ensure world body is put at absolute position")
         public void isPutAtAbsolutePosition() {
@@ -91,7 +102,6 @@ public class MapTests {
             // Arrange
             Vector3 position = new Vector3(1, 1, 1);
             Vector3[] positions = { position };
-            IWorldBody mockBody = mock(IWorldBody.class);
             doReturn(new Vector3[] { Vector3.Zero }).when(mockBody).getWorldPosition();
 
             // Assert
@@ -103,6 +113,23 @@ public class MapTests {
             // Assert
             verify(mockBody).setWorldPosition(positions);
             assertEquals(mockBody, subject.getAtAbsolute(position));
+        }
+
+        @Test
+        @DisplayName("When absolute positions count is different to world body's positions; log error and prevent movement")
+        public void logErrorWhenAbsolutePositionsAreInvalid() {
+
+            // Arrange
+            Vector3[] currentPositions = new Vector3[0];
+            Vector3[] absolutePositions = { Vector3.Zero };
+            doReturn(currentPositions).when(mockBody).getWorldPosition();
+
+            // Act
+            subject.putAtAbsolute(mockBody, absolutePositions);
+
+            // Assert
+            verify(mockLogger).Log(LogLevel.ERROR, Error.InvalidAbsolutePositionSet(0, 1));
+            verify(mockBody, times(0)).setWorldPosition(absolutePositions);
         }
     }
 
