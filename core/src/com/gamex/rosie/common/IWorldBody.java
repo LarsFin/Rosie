@@ -9,5 +9,6 @@ public interface IWorldBody {
     ArrayList<IWorldBody> getObstacles(Vector3 transformation);
     Vector3[] getWorldPosition();
     void gravityUpdate();
+    boolean isStatic();
     void setWorldPosition(Vector3[] worldPositions);
 }

@@ -12,20 +12,33 @@ import static com.gamex.rosie.common.WorldConstants._2dDirections;
 
 public class WorldBody implements IWorldBody {
 
+    private final boolean isStatic;
     private Vector3[] worldPosition;
     private final IMap map;
 
-    public WorldBody(IMap map, Vector3[] startPositions) {
+    public WorldBody(IMap map, Vector3[] startPositions, boolean isStatic) {
 
         this.map = map;
         worldPosition = startPositions;
+        this.isStatic = isStatic;
     }
 
     public ArrayList<IWorldBody> getObstacles(Vector3 transformation) {
 
-        // TODO: Implement
+        ArrayList<IWorldBody> obstacles = new ArrayList<>();
 
-        return new ArrayList<>();
+        for (Vector3 point : worldPosition) {
+
+            Vector3 pointAfterTransform = Vectors.add(point, transformation);
+            IWorldBody obstacle = map.getAtAbsolute(pointAfterTransform);
+
+            if (obstacle != this && !obstacles.contains(obstacle)) {
+
+                obstacles.add(obstacle);
+            }
+        }
+
+        return obstacles;
     }
 
     public Vector3[] getWorldPosition() {
@@ -49,6 +62,11 @@ public class WorldBody implements IWorldBody {
 
         map.putAtRelative(this, gravity);
         gravityUpdate();
+    }
+
+    public boolean isStatic() {
+
+        return isStatic;
     }
 
     public void setWorldPosition(Vector3[] worldPositions) {

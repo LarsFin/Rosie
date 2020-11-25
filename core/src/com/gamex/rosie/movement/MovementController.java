@@ -33,7 +33,20 @@ public class MovementController implements IMovementController {
 
                 for (IWorldBody obstacleBody : obstacleBodies) {
 
-                    // Check whether can be pushed
+                    if (obstacleBody.isStatic()) {
+
+                        concernedBodySets = new ArrayList<>();
+                        return;
+                    }
+
+                    // Check obstacle hasn't been a concerned body to avoid infinite recursion
+                    for (int j = i - 1; j >= 0; j--) {
+
+                        if (concernedBodySets.get(j).contains(obstacleBody)) {
+
+                            return;
+                        }
+                    }
 
                     if (concernedBodySets.size() <= i + 1) {
 
@@ -42,8 +55,6 @@ public class MovementController implements IMovementController {
 
                     concernedBodySets.get(i + 1).add(obstacleBody);
                 }
-
-                // Check body doesn't exist in concerned body sets already
             }
         }
 

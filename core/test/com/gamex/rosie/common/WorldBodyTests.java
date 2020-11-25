@@ -21,7 +21,7 @@ public class WorldBodyTests {
         mockMap = mock(IMap.class);
         Vector3[] startPositions = { Vector3.Zero, Vector3.X, Vector3.Z };
 
-        subject = new WorldBody(mockMap, startPositions);
+        subject = new WorldBody(mockMap, startPositions, false);
     }
 
     @Nested
