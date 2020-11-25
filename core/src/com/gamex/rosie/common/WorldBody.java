@@ -6,9 +6,12 @@ import com.gamex.rosie.map.CheckResult;
 import com.gamex.rosie.map.IMap;
 import com.gamex.rosie.math.Vectors;
 
+import java.util.ArrayList;
+
 import static com.gamex.rosie.common.WorldConstants._2dDirections;
 
 public class WorldBody implements IWorldBody {
+
     private Vector3[] worldPosition;
     private final IMap map;
 
@@ -16,6 +19,13 @@ public class WorldBody implements IWorldBody {
 
         this.map = map;
         worldPosition = startPositions;
+    }
+
+    public ArrayList<IWorldBody> getObstacles(Vector3 transformation) {
+
+        // TODO: Implement
+
+        return new ArrayList<>();
     }
 
     public Vector3[] getWorldPosition() {
