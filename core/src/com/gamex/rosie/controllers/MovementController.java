@@ -1,4 +1,4 @@
-package com.gamex.rosie.movement;
+package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
@@ -39,13 +39,12 @@ public class MovementController implements IMovementController {
                         return;
                     }
 
+                    // TODO: Check weight comparison
+
                     // Check obstacle hasn't been a concerned body to avoid infinite recursion
-                    for (int j = i - 1; j >= 0; j--) {
+                    if (isAlreadyConcernedBody(obstacleBody)) {
 
-                        if (concernedBodySets.get(j).contains(obstacleBody)) {
-
-                            return;
-                        }
+                        continue;
                     }
 
                     if (concernedBodySets.size() <= i + 1) {
@@ -70,5 +69,18 @@ public class MovementController implements IMovementController {
 
         // Clear concerned body sets
         concernedBodySets = new ArrayList<>();
+    }
+
+    private boolean isAlreadyConcernedBody(IWorldBody body) {
+
+        for (ArrayList<IWorldBody> concernedBodies : concernedBodySets) {
+
+            if (concernedBodies.contains(body)) {
+
+                return true;
+            }
+        }
+
+        return false;
     }
 }

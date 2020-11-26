@@ -1,12 +1,11 @@
 package com.gamex.rosie.common;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.map.CheckResult;
 import com.gamex.rosie.map.IMap;
 import org.junit.jupiter.api.*;
 
-import static com.gamex.rosie.common.WorldConstants._2dDirections;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 public class WorldBodyTests {
@@ -21,7 +20,60 @@ public class WorldBodyTests {
         mockMap = mock(IMap.class);
         Vector3[] startPositions = { Vector3.Zero, Vector3.X, Vector3.Z };
 
-        subject = new WorldBody(mockMap, startPositions, false);
+        WorldBodyConfig config = new WorldBodyConfig();
+        config.Static = false;
+        config.Weight = 1;
+
+        subject = new WorldBody(mockMap, startPositions, config);
+    }
+
+    @Nested
+    @DisplayName("Tests for constructing WorldBody and its relevant getters and setters")
+    public class ConstructorTests {
+
+        @Test
+        @DisplayName("Constructor sets positions of WorldBody")
+        public void setWorldPosition() {
+
+            // Arrange
+            Vector3[] positions = { Vector3.Zero, Vector3.X, Vector3.Y };
+
+            // Act
+            subject = new WorldBody(mockMap, positions, new WorldBodyConfig());
+
+            // Assert
+            assertEquals(positions, subject.getWorldPosition());
+        }
+
+        @Test
+        @DisplayName("Constructor sets whether static")
+        public void setIsStatic() {
+
+            // Arrange
+            WorldBodyConfig config = new WorldBodyConfig();
+            config.Static = true;
+
+            // Act
+            subject = new WorldBody(mockMap, new Vector3[0], config);
+
+            // Assert
+            assertTrue(subject.isStatic());
+        }
+
+        @Test
+        @DisplayName("Constructor sets weight")
+        public void setWeight() {
+
+            // Arrange
+            WorldBodyConfig config = new WorldBodyConfig();
+            config.Weight = 5;
+
+            // Act
+            subject = new WorldBody(mockMap, new Vector3[0], config);
+
+            // Assert
+            assertEquals(5, subject.getWeight());
+        }
     }
 
     @Nested
@@ -52,71 +104,6 @@ public class WorldBodyTests {
 
             // Assert
             verify(mockMap, times(2)).putAtRelative(subject, offset);
-        }
-    }
-
-    @Nested
-    @DisplayName("Tests for the movement of a world body")
-    public class MoveTests {
-
-        @Test
-        @DisplayName("World body should move to relative position when empty")
-        public void moveToRelativePositionWhenEmpty() {
-
-            // Arrange
-            Vector3[] positions = subject.getWorldPosition();
-            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
-            Vector2 movement = _2dDirections.get(direction);
-
-            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.OCCUPIED);
-            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.EMPTY);
-            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.EMPTY);
-
-            // Act
-            subject.move(direction);
-
-            // Assert
-            verify(mockMap).putAtRelative(subject, movement);
-        }
-
-        @Test
-        @DisplayName("World body should not move to relative position when occupied")
-        public void notMoveToRelativePositionWhenOccupied() {
-
-            // Arrange
-            Vector3[] positions = subject.getWorldPosition();
-            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
-            Vector2 movement = _2dDirections.get(direction);
-
-            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.OCCUPIED);
-            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.OCCUPIED);
-            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.EMPTY);
-
-            // Act
-            subject.move(direction);
-
-            // Assert
-            verify(mockMap, times(0)).putAtRelative(subject, movement);
-        }
-
-        @Test
-        @DisplayName("World body should not move to relative position when out of bounds")
-        public void notMoveToRelativePositionWhenOutOfBounds() {
-
-            // Arrange
-            Vector3[] positions = subject.getWorldPosition();
-            WorldConstants._2dDirection direction = WorldConstants._2dDirection.RIGHT;
-            Vector2 movement = _2dDirections.get(direction);
-
-            when(mockMap.checkEmptyRelative(positions[0], movement)).thenReturn(CheckResult.EMPTY);
-            when(mockMap.checkEmptyRelative(positions[1], movement)).thenReturn(CheckResult.OCCUPIED);
-            when(mockMap.checkEmptyRelative(positions[2], movement)).thenReturn(CheckResult.OUT_OF_BOUNDS);
-
-            // Act
-            subject.move(direction);
-
-            // Assert
-            verify(mockMap, times(0)).putAtRelative(subject, movement);
         }
     }
 }

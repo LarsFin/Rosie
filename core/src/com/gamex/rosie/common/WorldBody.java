@@ -1,6 +1,5 @@
 package com.gamex.rosie.common;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.map.CheckResult;
 import com.gamex.rosie.map.IMap;
@@ -8,19 +7,20 @@ import com.gamex.rosie.math.Vectors;
 
 import java.util.ArrayList;
 
-import static com.gamex.rosie.common.WorldConstants._2dDirections;
-
 public class WorldBody implements IWorldBody {
 
     private final boolean isStatic;
-    private Vector3[] worldPosition;
     private final IMap map;
+    private final int weight;
+    private Vector3[] worldPosition;
 
-    public WorldBody(IMap map, Vector3[] startPositions, boolean isStatic) {
+    public WorldBody(IMap map, Vector3[] startPositions, WorldBodyConfig config) {
 
         this.map = map;
         worldPosition = startPositions;
-        this.isStatic = isStatic;
+
+        this.isStatic = config.Static;
+        this.weight = config.Weight;
     }
 
     public ArrayList<IWorldBody> getObstacles(Vector3 transformation) {
@@ -39,6 +39,11 @@ public class WorldBody implements IWorldBody {
         }
 
         return obstacles;
+    }
+
+    public int getWeight() {
+
+        return weight;
     }
 
     public Vector3[] getWorldPosition() {
@@ -72,23 +77,6 @@ public class WorldBody implements IWorldBody {
     public void setWorldPosition(Vector3[] worldPositions) {
 
         this.worldPosition = worldPositions;
-    }
-
-    public void move(WorldConstants._2dDirection direction) {
-
-        Vector2 movement = _2dDirections.get(direction);
-
-        for (Vector3 point : worldPosition) {
-
-            Vector3 pointAfterMovement = Vectors.add(point, movement);
-
-            if (isNotSelfPositioned(pointAfterMovement) && map.checkEmptyRelative(point, movement) != CheckResult.EMPTY) {
-
-                return;
-            }
-        }
-
-        map.putAtRelative(this, movement);
     }
 
     private boolean isNotSelfPositioned(Vector3 pointCheck) {
