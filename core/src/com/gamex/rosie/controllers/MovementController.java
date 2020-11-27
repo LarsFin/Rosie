@@ -33,15 +33,15 @@ public class MovementController implements IMovementController {
 
                 for (IWorldBody obstacleBody : obstacleBodies) {
 
-                    if (obstacleBody.isStatic()) {
+                    boolean isStatic = obstacleBody.isStatic();
+                    boolean isTooHeavy = obstacleBody.getWeight() > concernedBody.getWeight();
+
+                    if (isStatic || isTooHeavy) {
 
                         concernedBodySets = new ArrayList<>();
                         return;
                     }
 
-                    // TODO: Check weight comparison
-
-                    // Check obstacle hasn't been a concerned body to avoid infinite recursion
                     if (isAlreadyConcernedBody(obstacleBody)) {
 
                         continue;
