@@ -3,10 +3,7 @@ package com.gamex.rosie.controllers;
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
 import com.gamex.rosie.map.IMap;
-import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
 
@@ -49,7 +46,7 @@ public class MovementControllerTests {
         public void moveSingleWorldBody() {
 
             // Arrange
-            doReturn(new ArrayList<IWorldBody>()).when(mockBody1.getObstacles(transformation));
+            when(mockBody1.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -65,13 +62,13 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            doReturn(obstacles).when(mockBody1).getObstacles(transformation);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
 
             int wt = 5;
             doReturn(wt).when(mockBody1).getWeight();
             doReturn(wt).when(mockBody2).getWeight();
 
-            doReturn(new ArrayList<>()).when(mockBody2).getObstacles(transformation);
+            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -88,15 +85,15 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            doReturn(obstacles).when(mockBody1).getObstacles(transformation);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
 
             int wt = 5;
-            doReturn(wt).when(mockBody1).getWeight();
-            doReturn(wt).when(mockBody2).getWeight();
+            when(mockBody1.getWeight()).thenReturn(wt);
+            when(mockBody2.getWeight()).thenReturn(wt);
 
             ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
             obstacles2.add(mockBody1);
-            doReturn(obstacles2).when(mockBody2).getObstacles(transformation);
+            when(mockBody2.getObstacles(transformation)).thenReturn(obstacles2);
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -113,12 +110,12 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            doReturn(obstacles).when(mockBody1).getObstacles(transformation);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
 
-            doReturn(5).when(mockBody1).getWeight();
-            doReturn(2).when(mockBody2).getWeight();
+            when(mockBody1.getWeight()).thenReturn(5);
+            when(mockBody2.getWeight()).thenReturn(2);
 
-            doReturn(new ArrayList<>()).when(mockBody2).getObstacles(transformation);
+            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -132,8 +129,6 @@ public class MovementControllerTests {
         @DisplayName("Move world body which is blocked by two other same weight world bodies")
         public void moveBranchedWorldBodyConnections() {
 
-            // TODO: Finish Test
-
             // Arrange
             IWorldBody mockBody2b = mock(IWorldBody.class);
             IWorldBody mockBody3b = mock(IWorldBody.class);
@@ -141,19 +136,26 @@ public class MovementControllerTests {
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
             obstacles.add(mockBody2b);
-            obstacles.add(mockBody3b);
-            doReturn(obstacles).when(mockBody1).getObstacles(transformation);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+
+            ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
+            obstacles2.add(mockBody3b);
+            when(mockBody2b.getObstacles(transformation)).thenReturn(obstacles2);
 
             int wt = 5;
-            doReturn(wt).when(mockBody1).getWeight();
-            doReturn(wt).when(mockBody2).getWeight();
-            doReturn(wt).when(mockBody2b).getWeight();
-            doReturn(wt).when(mockBody3b).getWeight();
+            when(mockBody1.getWeight()).thenReturn(wt);
+            when(mockBody2.getWeight()).thenReturn(wt);
+            when(mockBody2b.getWeight()).thenReturn(wt);
+            when(mockBody3b.getWeight()).thenReturn(wt);
 
             // Act
             subject.makeMovement(mockBody1, transformation);
 
             // Assert
+            verify(mockMap).putAtRelative(mockBody1, transformation);
+            verify(mockMap).putAtRelative(mockBody2, transformation);
+            verify(mockMap).putAtRelative(mockBody2b, transformation);
+            verify(mockMap).putAtRelative(mockBody3b, transformation);
         }
 
         @Test
@@ -161,10 +163,18 @@ public class MovementControllerTests {
         public void notMoveTwoWorldBodiesWithIncreasingWeight() {
 
             // Arrange
+            ArrayList<IWorldBody> obstacles = new ArrayList<>();
+            obstacles.add(mockBody2);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+
+            when(mockBody1.getWeight()).thenReturn(2);
+            when(mockBody2.getWeight()).thenReturn(5);
 
             // Act
+            subject.makeMovement(mockBody1, transformation);
 
             // Assert
+            verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
         }
 
         @Test
@@ -172,10 +182,21 @@ public class MovementControllerTests {
         public void notMoveTwoWorldBodiesWhenSecondIsStatic() {
 
             // Arrange
+            ArrayList<IWorldBody> obstacles = new ArrayList<>();
+            obstacles.add(mockBody2);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+
+            int wt = 5;
+            when(mockBody1.getWeight()).thenReturn(wt);
+            when(mockBody2.getWeight()).thenReturn(wt);
+
+            when(mockBody2.isStatic()).thenReturn(true);
 
             // Act
+            subject.makeMovement(mockBody1, transformation);
 
             // Assert
+            verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
         }
 
         @Test
@@ -184,10 +205,31 @@ public class MovementControllerTests {
         public void notMoveBranchedWorldBodyConnectionsWhenOnePathIsStatic() {
 
             // Arrange
+            IWorldBody mockBody2b = mock(IWorldBody.class);
+            IWorldBody mockBody3 = mock(IWorldBody.class);
+
+            ArrayList<IWorldBody> obstacles = new ArrayList<>();
+            obstacles.add(mockBody2);
+            obstacles.add(mockBody2b);
+            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+
+            ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
+            obstacles2.add(mockBody3);
+            when(mockBody2.getObstacles(transformation)).thenReturn(obstacles2);
+
+            int wt = 5;
+            when(mockBody1.getWeight()).thenReturn(wt);
+            when(mockBody2.getWeight()).thenReturn(wt);
+            when(mockBody2b.getWeight()).thenReturn(wt);
+            when(mockBody3.getWeight()).thenReturn(wt);
+
+            when(mockBody3.isStatic()).thenReturn(true);
 
             // Act
+            subject.makeMovement(mockBody1, transformation);
 
             // Assert
+            verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
         }
     }
 }

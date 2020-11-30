@@ -56,7 +56,7 @@ public class MapTests {
 
             IWorldBody mockBody = mock(IWorldBody.class);
             Vector3[] instantPositions = { Vectors.add(pos, relOffset) };
-            doReturn(new Vector3[1]).when(mockBody).getWorldPosition();
+            when(mockBody.getWorldPosition()).thenReturn(new Vector3[1]);
             subject.putAtAbsolute(mockBody, instantPositions);
 
             // Act
@@ -102,7 +102,7 @@ public class MapTests {
             // Arrange
             Vector3 position = new Vector3(1, 1, 1);
             Vector3[] positions = { position };
-            doReturn(new Vector3[] { Vector3.Zero }).when(mockBody).getWorldPosition();
+            when(mockBody.getWorldPosition()).thenReturn(new Vector3[] { Vector3.Zero });
 
             // Assert
             assertNull(subject.getAtAbsolute(position));
@@ -122,7 +122,7 @@ public class MapTests {
             // Arrange
             Vector3[] currentPositions = new Vector3[0];
             Vector3[] absolutePositions = { Vector3.Zero };
-            doReturn(currentPositions).when(mockBody).getWorldPosition();
+            when(mockBody.getWorldPosition()).thenReturn(currentPositions);
 
             // Act
             subject.putAtAbsolute(mockBody, absolutePositions);
@@ -146,7 +146,7 @@ public class MapTests {
             Vector3[] currentPosition = { new Vector3(1, 1, 1) };
             Vector3[] expected = { new Vector3(1, 0, 1) };
             IWorldBody mockBody = mock(IWorldBody.class);
-            doReturn(currentPosition).when(mockBody).getWorldPosition();
+            when(mockBody.getWorldPosition()).thenReturn(currentPosition);
 
             // Act
             subject.putAtRelative(mockBody, relativePosition);
