@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class GameController extends ApplicationAdapter {
+public class RosieGame extends ApplicationAdapter {
+
 	SpriteBatch batch;
 	Texture img;
 	
