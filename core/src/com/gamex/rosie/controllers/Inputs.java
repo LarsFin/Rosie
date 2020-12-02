@@ -5,5 +5,8 @@ public enum Inputs {
     LEFT,
     RIGHT,
     UP,
-    DOWN
+    DOWN,
+    TURN_CAMERA_RIGHT,
+    TURN_CAMERA_LEFT,
+    ACTION
 }
