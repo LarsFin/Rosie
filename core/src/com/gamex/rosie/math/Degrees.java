@@ -6,10 +6,7 @@ public final class Degrees {
 
     public static _3dDirection as3dDirection(float degrees) {
 
-        degrees %= 360f;
-
-        if (degrees < 0f)
-            degrees += 360f;
+        degrees = normalizeDegrees(degrees);
 
         if (degrees >= 315f || degrees < 45f)
             return _3dDirection.NORTH;
@@ -25,6 +22,23 @@ public final class Degrees {
 
     public static float sumDegrees(float... degreesValues) {
 
-        return 0f;
+        float sum = 0f;
+
+        for (float degrees : degreesValues) {
+
+            sum += degrees;
+        }
+
+        return normalizeDegrees(sum);
+    }
+
+    private static float normalizeDegrees(float degrees) {
+
+        degrees %= 360f;
+
+        if (degrees < 0f)
+            degrees += 360f;
+
+        return degrees;
     }
 }
