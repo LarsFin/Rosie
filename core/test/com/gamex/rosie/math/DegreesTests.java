@@ -42,7 +42,22 @@ public class DegreesTests {
                     Arguments.of(0f, _3dDirection.NORTH),
                     Arguments.of(90f, _3dDirection.EAST),
                     Arguments.of(180f, _3dDirection.SOUTH),
-                    Arguments.of(270f, _3dDirection.WEST)
+                    Arguments.of(270f, _3dDirection.WEST),
+
+                    Arguments.of(45f, _3dDirection.EAST),
+                    Arguments.of(135f, _3dDirection.SOUTH),
+                    Arguments.of(225f, _3dDirection.WEST),
+                    Arguments.of(315f, _3dDirection.NORTH),
+
+                    Arguments.of(360f, _3dDirection.NORTH),
+                    Arguments.of(810f, _3dDirection.EAST),
+                    Arguments.of(495f, _3dDirection.SOUTH),
+                    Arguments.of(585f, _3dDirection.WEST),
+
+                    Arguments.of(-45f, _3dDirection.NORTH),
+                    Arguments.of(-270f, _3dDirection.EAST),
+                    Arguments.of(-225f, _3dDirection.SOUTH),
+                    Arguments.of(-50f, _3dDirection.WEST)
             );
         }
     }
