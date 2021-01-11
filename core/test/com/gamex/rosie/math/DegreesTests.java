@@ -61,4 +61,37 @@ public class DegreesTests {
             );
         }
     }
+
+    @Nested
+    @DisplayName("Sum Degrees Tests")
+    public class SumDegreesTests {
+
+        @ParameterizedTest
+        @ArgumentsSource(SumOfPassedDegreesArgumentsProvider.class)
+        @DisplayName("Returns sum of passed degrees values")
+        public void sumOfPassedDegrees(float[] degreesValues, float expectedDegreesSum) {
+
+            // Act
+            float actualDegreesSum = Degrees.sumDegrees(degreesValues);
+
+            // Assert
+            assertEquals(expectedDegreesSum, actualDegreesSum);
+        }
+    }
+
+    private static class SumOfPassedDegreesArgumentsProvider implements ArgumentsProvider {
+
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+
+            float[] da1 = { 10f, 20f, 30f };
+            float[] da2 = { 180f, 270f, 45f };
+            float[] da3 = { 20f, -40f, 8f };
+
+            return Stream.of(
+                    Arguments.of(da1, 60f),
+                    Arguments.of(da2, 135f),
+                    Arguments.of(da3, 348f)
+            );
+        }
+    }
 }

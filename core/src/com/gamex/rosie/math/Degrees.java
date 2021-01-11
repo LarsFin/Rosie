@@ -22,4 +22,9 @@ public final class Degrees {
 
         return _3dDirection.WEST;
     }
+
+    public static float sumDegrees(float... degreesValues) {
+
+        return 0f;
+    }
 }
