@@ -25,6 +25,12 @@ public final class WorldConstants {
         DOWN
     }
 
+    public enum RotationalDirection {
+
+        CLOCKWISE,
+        ANTI_CLOCKWISE
+    }
+
     public static HashMap<_2dDirection, Vector2> _2dDirections;
 
     static {

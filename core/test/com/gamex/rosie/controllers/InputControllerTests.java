@@ -22,7 +22,7 @@ public class InputControllerTests {
     }
 
     @Nested
-    @DisplayName("Get Action Tests")
+    @DisplayName("Get Action Control Tests")
     public class GetActionTests {
 
         @Test
@@ -55,7 +55,7 @@ public class InputControllerTests {
     }
 
     @Nested
-    @DisplayName("Get Camera Tests")
+    @DisplayName("Get Camera Control Tests")
     public class GetCameraTests {
 
         @Test
@@ -120,7 +120,7 @@ public class InputControllerTests {
     }
 
     @Nested
-    @DisplayName("Get Horizontal Tests")
+    @DisplayName("Get Horizontal Control Tests")
     public class GetHorizontalTests {
 
         @Test
@@ -185,7 +185,7 @@ public class InputControllerTests {
     }
 
     @Nested
-    @DisplayName("Get Vertical Tests")
+    @DisplayName("Get Vertical Control Tests")
     public class GetVerticalTests {
 
         @Test
