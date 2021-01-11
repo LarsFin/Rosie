@@ -15,12 +15,12 @@ public class InputController implements IInputController {
         configureKeyMappings();
     }
 
-    public boolean getAction() {
+    public boolean getActionControl() {
 
         return inputApi.isKeyJustPressed(keyMappings.get(Inputs.ACTION));
     }
 
-    public int getCamera() {
+    public int getCameraControl() {
 
         int result = 0;
 
@@ -37,7 +37,7 @@ public class InputController implements IInputController {
         return result;
     }
 
-    public int getHorizontal() {
+    public int getHorizontalControl() {
 
         int result = 0;
 
@@ -54,7 +54,7 @@ public class InputController implements IInputController {
         return result;
     }
 
-    public int getVertical() {
+    public int getVerticalControl() {
 
         int result = 0;
 

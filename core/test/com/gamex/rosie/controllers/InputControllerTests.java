@@ -33,7 +33,7 @@ public class InputControllerTests {
             when(mockInput.isKeyJustPressed(Input.Keys.SPACE)).thenReturn(false);
 
             // Act
-            boolean result = subject.getAction();
+            boolean result = subject.getActionControl();
 
             // Assert
             assertFalse(result);
@@ -47,7 +47,7 @@ public class InputControllerTests {
             when(mockInput.isKeyJustPressed(Input.Keys.SPACE)).thenReturn(true);
 
             // Act
-            boolean result = subject.getAction();
+            boolean result = subject.getActionControl();
 
             // Assert
             assertTrue(result);
@@ -67,7 +67,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.E)).thenReturn(false);
 
             // Act
-            int result = subject.getCamera();
+            int result = subject.getCameraControl();
 
             // Assert
             assertEquals(0, result);
@@ -82,7 +82,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.E)).thenReturn(false);
 
             // Act
-            int result = subject.getCamera();
+            int result = subject.getCameraControl();
 
             // Assert
             assertEquals(-1, result);
@@ -97,7 +97,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.E)).thenReturn(true);
 
             // Act
-            int result = subject.getCamera();
+            int result = subject.getCameraControl();
 
             // Assert
             assertEquals(1, result);
@@ -112,7 +112,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.E)).thenReturn(true);
 
             // Act
-            int result = subject.getCamera();
+            int result = subject.getCameraControl();
 
             // Assert
             assertEquals(0, result);
@@ -132,7 +132,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(false);
 
             // Act
-            int result = subject.getHorizontal();
+            int result = subject.getHorizontalControl();
 
             // Assert
             assertEquals(0, result);
@@ -147,7 +147,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(false);
 
             // Act
-            int result = subject.getHorizontal();
+            int result = subject.getHorizontalControl();
 
             // Assert
             assertEquals(-1, result);
@@ -162,7 +162,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
             // Act
-            int result = subject.getHorizontal();
+            int result = subject.getHorizontalControl();
 
             // Assert
             assertEquals(1, result);
@@ -177,7 +177,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.RIGHT)).thenReturn(true);
 
             // Act
-            int result = subject.getHorizontal();
+            int result = subject.getHorizontalControl();
 
             // Assert
             assertEquals(0, result);
@@ -197,7 +197,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(false);
 
             // Act
-            int result = subject.getVertical();
+            int result = subject.getVerticalControl();
 
             // Assert
             assertEquals(0, result);
@@ -212,7 +212,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(false);
 
             // Act
-            int result = subject.getVertical();
+            int result = subject.getVerticalControl();
 
             // Assert
             assertEquals(-1, result);
@@ -227,7 +227,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
             // Act
-            int result = subject.getVertical();
+            int result = subject.getVerticalControl();
 
             // Assert
             assertEquals(1, result);
@@ -242,7 +242,7 @@ public class InputControllerTests {
             when(mockInput.isKeyPressed(Input.Keys.UP)).thenReturn(true);
 
             // Act
-            int result = subject.getVertical();
+            int result = subject.getVerticalControl();
 
             // Assert
             assertEquals(0, result);
