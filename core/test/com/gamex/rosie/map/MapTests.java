@@ -7,8 +7,7 @@ import com.gamex.rosie.logging.LogLevel;
 import com.gamex.rosie.math.Vectors;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static com.gamex.rosie.logging.Messages.Map.Error;
 
@@ -113,6 +112,36 @@ public class MapTests {
             // Assert
             verify(mockBody).setWorldPosition(positions);
             assertEquals(mockBody, subject.getAtAbsolute(position));
+        }
+
+        @Test
+        @DisplayName("Removes World body from its original position")
+        public void removedFromOriginalPosition() {
+
+            // Arrange
+            Vector3[] originalPoints = {
+                    new Vector3(1f, 1f, 0f),
+                    new Vector3(1f, 1f, 1f),
+                    new Vector3(1f, 1f, 2f)
+            };
+
+            when(mockBody.getWorldPosition()).thenReturn(originalPoints);
+            subject.putAtAbsolute(mockBody, originalPoints);
+
+            Vector3[] absolutePoints = {
+                    new Vector3(2f, 1f, 0f),
+                    new Vector3(2f, 1f, 1f),
+                    new Vector3(2f, 1f, 2f)
+            };
+
+            // Act
+            subject.putAtAbsolute(mockBody, absolutePoints);
+
+            // Assert
+            verify(mockBody).setWorldPosition(absolutePoints);
+
+            for (Vector3 point : originalPoints)
+                assertNotEquals(mockBody, subject.getAtAbsolute(point));
         }
 
         @Test
