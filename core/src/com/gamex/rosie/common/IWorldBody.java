@@ -11,5 +11,6 @@ public interface IWorldBody {
     Vector3[] getWorldPosition();
     void gravityUpdate();
     boolean isStatic();
+    boolean isTransformationSafe(Vector3 transformation);
     void setWorldPosition(Vector3[] worldPositions);
 }

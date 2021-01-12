@@ -20,7 +20,7 @@ public class MovementController implements IMovementController {
     public void makeMovement(IWorldBody worldBody, Vector3 transformation) {
 
         // Add initial concerned body
-        concernedBodySets.add(new ArrayList<IWorldBody>());
+        concernedBodySets.add(new ArrayList<>());
         concernedBodySets.get(0).add(worldBody);
 
         for (int i = 0; i < concernedBodySets.size(); i++) {
@@ -49,7 +49,7 @@ public class MovementController implements IMovementController {
 
                     if (concernedBodySets.size() <= i + 1) {
 
-                        concernedBodySets.add(new ArrayList<IWorldBody>());
+                        concernedBodySets.add(new ArrayList<>());
                     }
 
                     concernedBodySets.get(i + 1).add(obstacleBody);

@@ -23,6 +23,14 @@ public class WorldBody implements IWorldBody {
         this.weight = config.Weight;
     }
 
+    // TODO: TDD
+    public boolean isTransformationSafe(Vector3 transformation) {
+
+        // iterate through positions, ensuring each position is in bounds
+
+        return false;
+    }
+
     public ArrayList<IWorldBody> getObstacles(Vector3 transformation) {
 
         ArrayList<IWorldBody> obstacles = new ArrayList<>();

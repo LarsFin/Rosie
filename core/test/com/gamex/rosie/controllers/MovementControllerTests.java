@@ -39,6 +39,9 @@ public class MovementControllerTests {
 
             mockBody1 = mock(IWorldBody.class);
             mockBody2 = mock(IWorldBody.class);
+
+            when(mockBody1.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockBody2.isTransformationSafe(transformation)).thenReturn(true);
         }
 
         @Test
@@ -46,7 +49,7 @@ public class MovementControllerTests {
         public void moveSingleWorldBody() {
 
             // Arrange
-            when(mockBody1.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
+            when(mockBody1.getObstacles(transformation)).thenReturn(new ArrayList<>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -68,7 +71,7 @@ public class MovementControllerTests {
             doReturn(wt).when(mockBody1).getWeight();
             doReturn(wt).when(mockBody2).getWeight();
 
-            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
+            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -115,7 +118,7 @@ public class MovementControllerTests {
             when(mockBody1.getWeight()).thenReturn(5);
             when(mockBody2.getWeight()).thenReturn(2);
 
-            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<IWorldBody>());
+            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<>());
 
             // Act
             subject.makeMovement(mockBody1, transformation);
@@ -132,6 +135,9 @@ public class MovementControllerTests {
             // Arrange
             IWorldBody mockBody2b = mock(IWorldBody.class);
             IWorldBody mockBody3b = mock(IWorldBody.class);
+
+            when(mockBody2b.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockBody3b.isTransformationSafe(transformation)).thenReturn(true);
 
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
@@ -156,6 +162,20 @@ public class MovementControllerTests {
             verify(mockMap).putAtRelative(mockBody2, transformation);
             verify(mockMap).putAtRelative(mockBody2b, transformation);
             verify(mockMap).putAtRelative(mockBody3b, transformation);
+        }
+
+        @Test
+        @DisplayName("Not move world body over bounds of map")
+        public void notMoveWorldBodyOverBoundsOfMap() {
+
+            // Arrange
+            when(mockBody1.isTransformationSafe(transformation)).thenReturn(false);
+
+            // Act
+            subject.makeMovement(mockBody1, transformation);
+
+            // Assert
+            verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
         }
 
         @Test
@@ -207,6 +227,9 @@ public class MovementControllerTests {
             // Arrange
             IWorldBody mockBody2b = mock(IWorldBody.class);
             IWorldBody mockBody3 = mock(IWorldBody.class);
+
+            when(mockBody2b.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockBody3.isTransformationSafe(transformation)).thenReturn(true);
 
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);

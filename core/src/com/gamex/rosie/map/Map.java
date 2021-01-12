@@ -15,7 +15,6 @@ public class Map implements IMap {
     private final int length;
     private final int height;
 
-
     private final float tileSize;
     private final IWorldBody[][][] bodyMap;
     private final ILogger logger;

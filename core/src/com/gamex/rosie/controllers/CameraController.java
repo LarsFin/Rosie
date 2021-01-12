@@ -2,8 +2,6 @@ package com.gamex.rosie.controllers;
 
 import com.gamex.rosie.math.Degrees;
 
-import java.util.HashMap;
-
 import static com.gamex.rosie.common.WorldConstants._3dDirection;
 import static com.gamex.rosie.common.WorldConstants.RotationalDirection;
 
