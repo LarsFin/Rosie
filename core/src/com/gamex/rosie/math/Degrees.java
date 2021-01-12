@@ -20,6 +20,13 @@ public final class Degrees {
         return _3dDirection.WEST;
     }
 
+    public static float from3dDirection(_3dDirection direction) {
+
+        // TODO
+
+        return 0;
+    }
+
     public static float sumDegrees(float... degreesValues) {
 
         float sum = 0f;

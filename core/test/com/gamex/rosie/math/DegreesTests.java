@@ -3,6 +3,7 @@ package com.gamex.rosie.math;
 import com.gamex.rosie.common.WorldConstants._3dDirection;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -58,6 +59,47 @@ public class DegreesTests {
                     Arguments.of(-270f, _3dDirection.EAST),
                     Arguments.of(-225f, _3dDirection.SOUTH),
                     Arguments.of(-50f, _3dDirection.WEST)
+            );
+        }
+    }
+
+    @Nested
+    @DisplayName("From 3d Direction Tests")
+    public class From3dDirectionTests {
+
+        @ParameterizedTest
+        @ArgumentsSource(DegreesFrom3dDirectionArgumentsProvider.class)
+        @DisplayName("Returns correct degrees value from given 3d direction")
+        public void returnsDegreesFrom3dDirection(_3dDirection direction, float expectedDegrees) {
+
+            // Act
+            float actualDegrees = Degrees.from3dDirection(direction);
+
+            // Assert
+            assertEquals(expectedDegrees, actualDegrees);
+        }
+
+        @Test
+        @DisplayName("Returns -1 when given a 3d direction which cannot be parsed")
+        public void returnsFailureWhenInvalidDirection() {
+
+            // Act
+            float result = Degrees.from3dDirection(_3dDirection.UP);
+
+            // Assert
+            assertEquals(-1f, result);
+        }
+    }
+
+    private static class DegreesFrom3dDirectionArgumentsProvider implements ArgumentsProvider {
+
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+
+            return Stream.of(
+                    Arguments.of(_3dDirection.NORTH, 0),
+                    Arguments.of(_3dDirection.EAST, 90),
+                    Arguments.of(_3dDirection.SOUTH, 180),
+                    Arguments.of(_3dDirection.WEST, 270)
             );
         }
     }
