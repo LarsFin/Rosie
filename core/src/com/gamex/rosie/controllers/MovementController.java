@@ -8,79 +8,52 @@ import java.util.ArrayList;
 
 public class MovementController implements IMovementController {
 
-    private ArrayList<ArrayList<IWorldBody>> concernedBodySets;
+    private ArrayList<IWorldBody> checkedWorldBodies;
     private final IMap map;
 
     public MovementController(IMap map) {
 
-        concernedBodySets = new ArrayList<>();
+        checkedWorldBodies = new ArrayList<>();
         this.map = map;
     }
 
     public void makeMovement(IWorldBody worldBody, Vector3 transformation) {
 
-        // Add initial concerned body
-        concernedBodySets.add(new ArrayList<>());
-        concernedBodySets.get(0).add(worldBody);
+        if (canMakeMovement(worldBody, transformation)) {
 
-        for (int i = 0; i < concernedBodySets.size(); i++) {
-
-            ArrayList<IWorldBody> concernedBodies = concernedBodySets.get(i);
-
-            for (IWorldBody concernedBody : concernedBodies) {
-
-                ArrayList<IWorldBody> obstacleBodies = concernedBody.getObstacles(transformation);
-
-                for (IWorldBody obstacleBody : obstacleBodies) {
-
-                    boolean isStatic = obstacleBody.isStatic();
-                    boolean isTooHeavy = obstacleBody.getWeight() > concernedBody.getWeight();
-
-                    if (isStatic || isTooHeavy) {
-
-                        concernedBodySets = new ArrayList<>();
-                        return;
-                    }
-
-                    if (isAlreadyConcernedBody(obstacleBody)) {
-
-                        continue;
-                    }
-
-                    if (concernedBodySets.size() <= i + 1) {
-
-                        concernedBodySets.add(new ArrayList<>());
-                    }
-
-                    concernedBodySets.get(i + 1).add(obstacleBody);
-                }
-            }
-        }
-
-        for (int i = concernedBodySets.size() - 1; i >= 0; i--) {
-
-            ArrayList<IWorldBody> bodiesToMove = concernedBodySets.get(i);
-
-            for (IWorldBody bodyToMove : bodiesToMove) {
+            for (IWorldBody bodyToMove : checkedWorldBodies) {
 
                 map.putAtRelative(bodyToMove, transformation);
             }
         }
 
-        // Clear concerned body sets
-        concernedBodySets = new ArrayList<>();
+        checkedWorldBodies = new ArrayList<>();
     }
 
-    private boolean isAlreadyConcernedBody(IWorldBody body) {
+    private boolean canMakeMovement(IWorldBody worldBody, Vector3 transformation) {
 
-        for (ArrayList<IWorldBody> concernedBodies : concernedBodySets) {
+        if (checkedWorldBodies.contains(worldBody))
+            return true;
 
-            if (concernedBodies.contains(body)) {
+        checkedWorldBodies.add(worldBody);
 
-                return true;
-            }
+        if (!worldBody.isTransformationSafe(transformation))
+            return false;
+
+        ArrayList<IWorldBody> obstacleBodies = worldBody.getObstacles(transformation);
+
+        for (IWorldBody obstacleBody : obstacleBodies) {
+
+            boolean isStatic = obstacleBody.isStatic();
+            boolean isTooHeavy = obstacleBody.getWeight() > worldBody.getWeight();
+
+            if (isStatic || isTooHeavy)
+                return false;
+
+            if (!canMakeMovement(obstacleBody, transformation))
+                return false;
         }
 
-        return false;
+        return true;
     }
 }
