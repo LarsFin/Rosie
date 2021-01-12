@@ -75,6 +75,15 @@ public class Map implements IMap {
             return;
         }
 
+        for (Vector3 position : currentPositions) {
+
+            int x = (int) position.x;
+            int y = (int) position.y;
+            int z = (int) position.z;
+
+            bodyMap[x][y][z] = null;
+        }
+
         for (Vector3 position : positions) {
 
             int x = (int) position.x;
