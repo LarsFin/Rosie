@@ -22,7 +22,9 @@ public final class WorldConstants {
         SOUTH,
         WEST,
         UP,
-        DOWN
+        DOWN,
+
+        NONE
     }
 
     public enum RotationalDirection {
