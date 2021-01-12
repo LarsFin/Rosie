@@ -22,9 +22,23 @@ public final class Degrees {
 
     public static float from3dDirection(_3dDirection direction) {
 
-        // TODO
+        switch (direction) {
 
-        return 0;
+            case NORTH:
+                return 0f;
+
+            case EAST:
+                return 90f;
+
+            case SOUTH:
+                return 180f;
+
+            case WEST:
+                return 270f;
+
+            default:
+                return -1f;
+        }
     }
 
     public static float sumDegrees(float... degreesValues) {
