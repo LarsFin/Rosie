@@ -76,9 +76,15 @@ public class WorldBody implements IWorldBody {
 
     public boolean isTransformationSafe(Vector3 transformation) {
 
-        // iterate through positions, ensuring each position is in bounds
+        for (Vector3 point : worldPosition) {
 
-        return false;
+            CheckResult checkResult = map.checkEmptyRelative(point, transformation);
+
+            if (checkResult == CheckResult.OUT_OF_BOUNDS)
+                return false;
+        }
+
+        return true;
     }
 
     public void setWorldPosition(Vector3[] worldPositions) {
