@@ -24,6 +24,18 @@ public class PlayerController implements IPlayerController {
 
     public _3dDirection resolveMovementDirection(int horizontalInputFeed, int verticalInputFeed) {
 
+        if (verticalInputFeed > 0)
+            return _3dDirection.NORTH;
+
+        if (horizontalInputFeed > 0)
+            return _3dDirection.EAST;
+
+        if (verticalInputFeed < 0)
+            return _3dDirection.SOUTH;
+
+        if (horizontalInputFeed < 0)
+            return _3dDirection.WEST;
+
         return _3dDirection.NONE;
     }
 }
