@@ -106,4 +106,45 @@ public class WorldBodyTests {
             verify(mockMap, times(2)).putAtRelative(subject, offset);
         }
     }
+
+    @Nested
+    @DisplayName("Is Transformation Safe Tests")
+    public class IsTransformationSafeTests {
+
+        @Test
+        @DisplayName("Return true when transformation is within bounds of map")
+        public void returnTrueWhenSafe() {
+
+            // Arrange
+            Vector3 transformation = Vector3.Z;
+
+            when(mockMap.checkEmptyRelative(Vector3.Zero, transformation)).thenReturn(CheckResult.OCCUPIED);
+            when(mockMap.checkEmptyRelative(Vector3.X, transformation)).thenReturn(CheckResult.EMPTY);
+            when(mockMap.checkEmptyRelative(Vector3.Z, transformation)).thenReturn(CheckResult.EMPTY);
+
+            // Act
+            boolean result = subject.isTransformationSafe(transformation);
+
+            // Assert
+            assertTrue(result);
+        }
+
+        @Test
+        @DisplayName("Return false when transformation is out of bounds of map")
+        public void returnFalseWhenUnsafe() {
+
+            // Arrange
+            Vector3 transformation = Vector3.Z;
+
+            when(mockMap.checkEmptyRelative(Vector3.Zero, transformation)).thenReturn(CheckResult.EMPTY);
+            when(mockMap.checkEmptyRelative(Vector3.X, transformation)).thenReturn(CheckResult.OUT_OF_BOUNDS);
+            when(mockMap.checkEmptyRelative(Vector3.Z, transformation)).thenReturn(CheckResult.OCCUPIED);
+
+            // Act
+            boolean result = subject.isTransformationSafe(transformation);
+
+            // Assert
+            assertFalse(result);
+        }
+    }
 }
