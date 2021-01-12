@@ -77,4 +77,43 @@ public class PlayerControllerTests {
             );
         }
     }
+
+    @Nested
+    @DisplayName("Resolve Movement Direction Tests")
+    public class ResolveMovementDirectionTests {
+
+        @ParameterizedTest
+        @ArgumentsSource(ReturnResolvedDirectionArgumentsProvider.class)
+        @DisplayName("Return correct direction from passed input values")
+        public void returnResolvedDirection(int horizontalInputFeed,
+                                            int verticalInputFeed,
+                                            _3dDirection expectedDirection) {
+
+            // Act
+            _3dDirection actualDirection = subject.resolveMovementDirection(horizontalInputFeed, verticalInputFeed);
+
+            // Assert
+            assertEquals(expectedDirection, actualDirection);
+        }
+    }
+
+    private static class ReturnResolvedDirectionArgumentsProvider implements ArgumentsProvider {
+
+        @Override
+        public Stream<? extends Arguments> provideArguments(ExtensionContext context) {
+
+            return Stream.of(
+                    Arguments.of(0, 0, _3dDirection.NONE),
+                    Arguments.of(1, 0, _3dDirection.EAST),
+                    Arguments.of(0, 1, _3dDirection.NORTH),
+                    Arguments.of(-1, 0, _3dDirection.WEST),
+                    Arguments.of(0, -1, _3dDirection.SOUTH),
+
+                    Arguments.of(1, 1, _3dDirection.NORTH),
+                    Arguments.of(-1, 1, _3dDirection.NORTH),
+                    Arguments.of(1, -1, _3dDirection.EAST),
+                    Arguments.of(-1, -1, _3dDirection.SOUTH)
+            );
+        }
+    }
 }

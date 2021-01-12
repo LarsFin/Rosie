@@ -21,4 +21,9 @@ public class PlayerController implements IPlayerController {
 
         return _3dDirections.get(resultantDirection);
     }
+
+    public _3dDirection resolveMovementDirection(int horizontalInputFeed, int verticalInputFeed) {
+
+        return _3dDirection.NONE;
+    }
 }
