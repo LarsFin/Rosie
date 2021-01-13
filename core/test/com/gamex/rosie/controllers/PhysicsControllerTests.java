@@ -23,6 +23,7 @@ public class PhysicsControllerTests {
 
     private IMap mockMap;
     private TransformationFactory mockFactory;
+    private Transformation mockTransformation;
 
     @Nested
     @DisplayName("Get Gravity Transformations Tests")
@@ -33,10 +34,10 @@ public class PhysicsControllerTests {
 
             mockMap = mock(IMap.class);
             mockFactory = mock(TransformationFactory.class);
-            Transformation dummyTransformation = mock(Transformation.class);
+            mockTransformation = mock(Transformation.class);
 
             when(mockMap.getSize()).thenReturn(new Vector3(2, 2, 2));
-            when(mockFactory.build(any(IWorldBody.class), any(Vector3.class))).thenReturn(dummyTransformation);
+            when(mockFactory.build(any(IWorldBody.class), any(Vector3.class))).thenReturn(mockTransformation);
 
             subject = new PhysicsController(mockMap, mockFactory);
         }
@@ -129,6 +130,8 @@ public class PhysicsControllerTests {
 
             when(mockMap.getAtAbsolute(Vector3.Zero)).thenReturn(mockBody);
             when(mockMap.getAtAbsolute(Vector3.X)).thenReturn(mockBody);
+
+            when(mockTransformation.getWorldBody()).thenReturn(mockBody);
 
             // Act
             List<Transformation> transformations = subject.getGravityTransformations();
