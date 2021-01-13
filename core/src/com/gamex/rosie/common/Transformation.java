@@ -22,4 +22,15 @@ public class Transformation {
 
         return displacement;
     }
+
+    public static Considerations[] allConsiderations() {
+
+        return Considerations.values();
+    }
+
+    public enum Considerations {
+
+        WEIGHT,
+        STATIC
+    }
 }

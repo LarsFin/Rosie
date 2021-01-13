@@ -2,6 +2,7 @@ package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
 import com.gamex.rosie.common.IWorldBody;
+import com.gamex.rosie.common.Transformation;
 import com.gamex.rosie.map.IMap;
 import org.junit.jupiter.api.*;
 
@@ -9,9 +10,9 @@ import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
 
-public class MovementControllerTests {
+public class TransformControllerTests {
 
-    private MovementController subject;
+    private TransformController subject;
 
     private IMap mockMap;
 
@@ -20,28 +21,34 @@ public class MovementControllerTests {
 
         mockMap = mock(IMap.class);
 
-        subject = new MovementController(mockMap);
+        subject = new TransformController(mockMap);
     }
 
     @Nested
-    @DisplayName("Make Movement Tests")
+    @DisplayName("Apply Transform Tests")
     public class MakeMovementTests {
 
-        private Vector3 transformation;
+        private Vector3 displacement;
 
+        private Transformation mockTransformation;
         private IWorldBody mockBody1;
         private IWorldBody mockBody2;
 
         @BeforeEach
         public void beforeEach() {
 
-            transformation = new Vector3(-1, 0, 0);
+            displacement = new Vector3(-1, 0, 0);
+
+            mockTransformation = mock(Transformation.class);
 
             mockBody1 = mock(IWorldBody.class);
             mockBody2 = mock(IWorldBody.class);
 
-            when(mockBody1.isTransformationSafe(transformation)).thenReturn(true);
-            when(mockBody2.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockTransformation.getWorldBody()).thenReturn(mockBody1);
+            when(mockTransformation.getDisplacement()).thenReturn(displacement);
+
+            when(mockBody1.isTransformationSafe(displacement)).thenReturn(true);
+            when(mockBody2.isTransformationSafe(displacement)).thenReturn(true);
         }
 
         @Test
@@ -49,13 +56,13 @@ public class MovementControllerTests {
         public void moveSingleWorldBody() {
 
             // Arrange
-            when(mockBody1.getObstacles(transformation)).thenReturn(new ArrayList<>());
+            when(mockBody1.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
-            verify(mockMap).putAtRelative(mockBody1, transformation);
+            verify(mockMap).putAtRelative(mockBody1, displacement);
         }
 
         @Test
@@ -65,20 +72,20 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             int wt = 5;
             doReturn(wt).when(mockBody1).getWeight();
             doReturn(wt).when(mockBody2).getWeight();
 
-            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<>());
+            when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
-            verify(mockMap).putAtRelative(mockBody1, transformation);
-            verify(mockMap).putAtRelative(mockBody2, transformation);
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
         }
 
         @Test
@@ -88,7 +95,7 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             int wt = 5;
             when(mockBody1.getWeight()).thenReturn(wt);
@@ -96,14 +103,14 @@ public class MovementControllerTests {
 
             ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
             obstacles2.add(mockBody1);
-            when(mockBody2.getObstacles(transformation)).thenReturn(obstacles2);
+            when(mockBody2.getObstacles(displacement)).thenReturn(obstacles2);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
-            verify(mockMap).putAtRelative(mockBody1, transformation);
-            verify(mockMap).putAtRelative(mockBody2, transformation);
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
         }
 
         @Test
@@ -113,19 +120,19 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             when(mockBody1.getWeight()).thenReturn(5);
             when(mockBody2.getWeight()).thenReturn(2);
 
-            when(mockBody2.getObstacles(transformation)).thenReturn(new ArrayList<>());
+            when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
-            verify(mockMap).putAtRelative(mockBody1, transformation);
-            verify(mockMap).putAtRelative(mockBody2, transformation);
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
         }
 
         @Test
@@ -136,17 +143,17 @@ public class MovementControllerTests {
             IWorldBody mockBody2b = mock(IWorldBody.class);
             IWorldBody mockBody3b = mock(IWorldBody.class);
 
-            when(mockBody2b.isTransformationSafe(transformation)).thenReturn(true);
-            when(mockBody3b.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockBody2b.isTransformationSafe(displacement)).thenReturn(true);
+            when(mockBody3b.isTransformationSafe(displacement)).thenReturn(true);
 
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
             obstacles.add(mockBody2b);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
             obstacles2.add(mockBody3b);
-            when(mockBody2b.getObstacles(transformation)).thenReturn(obstacles2);
+            when(mockBody2b.getObstacles(displacement)).thenReturn(obstacles2);
 
             int wt = 5;
             when(mockBody1.getWeight()).thenReturn(wt);
@@ -155,13 +162,13 @@ public class MovementControllerTests {
             when(mockBody3b.getWeight()).thenReturn(wt);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
-            verify(mockMap).putAtRelative(mockBody1, transformation);
-            verify(mockMap).putAtRelative(mockBody2, transformation);
-            verify(mockMap).putAtRelative(mockBody2b, transformation);
-            verify(mockMap).putAtRelative(mockBody3b, transformation);
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
+            verify(mockMap).putAtRelative(mockBody2b, displacement);
+            verify(mockMap).putAtRelative(mockBody3b, displacement);
         }
 
         @Test
@@ -169,10 +176,10 @@ public class MovementControllerTests {
         public void notMoveWorldBodyOverBoundsOfMap() {
 
             // Arrange
-            when(mockBody1.isTransformationSafe(transformation)).thenReturn(false);
+            when(mockBody1.isTransformationSafe(displacement)).thenReturn(false);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
@@ -185,13 +192,13 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             when(mockBody1.getWeight()).thenReturn(2);
             when(mockBody2.getWeight()).thenReturn(5);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
@@ -204,7 +211,7 @@ public class MovementControllerTests {
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             int wt = 5;
             when(mockBody1.getWeight()).thenReturn(wt);
@@ -213,7 +220,7 @@ public class MovementControllerTests {
             when(mockBody2.isStatic()).thenReturn(true);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
@@ -228,17 +235,17 @@ public class MovementControllerTests {
             IWorldBody mockBody2b = mock(IWorldBody.class);
             IWorldBody mockBody3 = mock(IWorldBody.class);
 
-            when(mockBody2b.isTransformationSafe(transformation)).thenReturn(true);
-            when(mockBody3.isTransformationSafe(transformation)).thenReturn(true);
+            when(mockBody2b.isTransformationSafe(displacement)).thenReturn(true);
+            when(mockBody3.isTransformationSafe(displacement)).thenReturn(true);
 
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
             obstacles.add(mockBody2);
             obstacles.add(mockBody2b);
-            when(mockBody1.getObstacles(transformation)).thenReturn(obstacles);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
 
             ArrayList<IWorldBody> obstacles2 = new ArrayList<>();
             obstacles2.add(mockBody3);
-            when(mockBody2.getObstacles(transformation)).thenReturn(obstacles2);
+            when(mockBody2.getObstacles(displacement)).thenReturn(obstacles2);
 
             int wt = 5;
             when(mockBody1.getWeight()).thenReturn(wt);
@@ -249,7 +256,7 @@ public class MovementControllerTests {
             when(mockBody3.isStatic()).thenReturn(true);
 
             // Act
-            subject.makeMovement(mockBody1, transformation);
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
