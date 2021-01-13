@@ -183,7 +183,7 @@ public class TransformControllerTests {
             when(mockBody1.getWeight()).thenReturn(2);
             when(mockBody2.getWeight()).thenReturn(5);
 
-            Transformation.Considerations[] considerations = { Transformation.Considerations.STATIC };
+            Transformation.Consideration[] considerations = { Transformation.Consideration.STATIC };
 
             // Act
             subject.applyTransform(mockTransformation, considerations);
@@ -200,7 +200,7 @@ public class TransformControllerTests {
             // Arrange
             when(mockBody1.isStatic()).thenReturn(true);
 
-            Transformation.Considerations[] considerations = { Transformation.Considerations.WEIGHT };
+            Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
             // Act
             subject.applyTransform(mockTransformation, considerations);
@@ -224,7 +224,7 @@ public class TransformControllerTests {
 
             when(mockBody2.isStatic()).thenReturn(true);
 
-            Transformation.Considerations[] considerations = { Transformation.Considerations.WEIGHT };
+            Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
             // Act
             subject.applyTransform(mockTransformation, considerations);

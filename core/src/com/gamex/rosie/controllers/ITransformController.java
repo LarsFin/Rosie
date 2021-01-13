@@ -4,5 +4,5 @@ import com.gamex.rosie.common.Transformation;
 
 public interface ITransformController {
 
-    void applyTransform(Transformation transformation, Transformation.Considerations[] considerations);
+    void applyTransform(Transformation transformation, Transformation.Consideration[] considerations);
 }

@@ -53,6 +53,8 @@ public class PhysicsControllerTests {
             when(mockMap.getAtAbsolute(Vector3.Zero)).thenReturn(body1);
             when(mockMap.getAtAbsolute(Vector3.X)).thenReturn(body2);
 
+            when(mockTransformation.getWorldBody()).thenReturn(body1);
+
             // Act
             List<Transformation> transformations = subject.getGravityTransformations();
 
@@ -82,6 +84,11 @@ public class PhysicsControllerTests {
             Transformation transformation2 = mock(Transformation.class);
             Transformation transformation3 = mock(Transformation.class);
             Transformation transformation4 = mock(Transformation.class);
+
+            when(transformation1.getWorldBody()).thenReturn(body1);
+            when(transformation2.getWorldBody()).thenReturn(body2);
+            when(transformation3.getWorldBody()).thenReturn(body3);
+            when(transformation4.getWorldBody()).thenReturn(body4);
 
             when(mockFactory.build(body1, subject.getGravity())).thenReturn(transformation1);
             when(mockFactory.build(body2, subject.getGravity())).thenReturn(transformation2);

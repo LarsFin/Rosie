@@ -23,12 +23,25 @@ public class Transformation {
         return displacement;
     }
 
-    public static Considerations[] allConsiderations() {
+    public static Consideration[] allConsiderations() {
 
-        return Considerations.values();
+        return Consideration.values();
     }
 
-    public enum Considerations {
+    public static boolean hasConsideration(Consideration[] considerations, Consideration considerationToCheck) {
+
+        for (Consideration consideration : considerations) {
+
+            if (consideration == considerationToCheck) {
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public enum Consideration {
 
         WEIGHT,
         STATIC

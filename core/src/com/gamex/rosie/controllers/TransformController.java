@@ -7,6 +7,9 @@ import com.gamex.rosie.map.IMap;
 
 import java.util.ArrayList;
 
+import static com.gamex.rosie.common.Transformation.hasConsideration;
+import static com.gamex.rosie.common.Transformation.Consideration.*;
+
 public class TransformController implements ITransformController {
 
     private ArrayList<IWorldBody> checkedWorldBodies;
@@ -18,7 +21,7 @@ public class TransformController implements ITransformController {
         this.map = map;
     }
 
-    public void applyTransform(Transformation transformation, Transformation.Considerations[] considerations) {
+    public void applyTransform(Transformation transformation, Transformation.Consideration[] considerations) {
 
         IWorldBody worldBody = transformation.getWorldBody();
         Vector3 displacement = transformation.getDisplacement();
@@ -36,12 +39,15 @@ public class TransformController implements ITransformController {
 
     private boolean canApplyTransform(IWorldBody worldBody,
                                       Vector3 displacement,
-                                      Transformation.Considerations[] considerations) {
+                                      Transformation.Consideration[] considerations) {
 
         if (checkedWorldBodies.contains(worldBody))
             return true;
 
         checkedWorldBodies.add(worldBody);
+
+        if (hasConsideration(considerations, STATIC) && worldBody.isStatic())
+            return false;
 
         if (!worldBody.isTransformationSafe(displacement))
             return false;
@@ -50,11 +56,13 @@ public class TransformController implements ITransformController {
 
         for (IWorldBody obstacleBody : obstacleBodies) {
 
-            boolean isStatic = obstacleBody.isStatic();
-            boolean isTooHeavy = obstacleBody.getWeight() > worldBody.getWeight();
+            if (hasConsideration(considerations, WEIGHT)) {
 
-            if (isStatic || isTooHeavy)
-                return false;
+                boolean isTooHeavy = obstacleBody.getWeight() > worldBody.getWeight();
+
+                if (isTooHeavy)
+                    return false;
+            }
 
             if (!canApplyTransform(obstacleBody, displacement, considerations))
                 return false;
