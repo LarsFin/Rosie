@@ -11,22 +11,20 @@ import static com.gamex.rosie.logging.Messages.Map.Error;
 
 public class Map implements IMap {
 
-    private final int width;
-    private final int length;
-    private final int height;
-
     private final float tileSize;
+    private final Vector3 size;
     private final IWorldBody[][][] bodyMap;
     private final ILogger logger;
 
-    public Map(float tileSize, Vector3 mapSize, ILogger logger) {
+    public Map(float tileSize, Vector3 size, ILogger logger) {
 
         this.tileSize = tileSize;
+        this.size = size;
         this.logger = logger;
 
-        width = (int) mapSize.x;
-        length = (int) mapSize.y;
-        height = (int) mapSize.z;
+        int width = (int) size.x;
+        int length = (int) size.y;
+        int height = (int) size.z;
 
         bodyMap = new IWorldBody[width][length][height];
     }
@@ -63,6 +61,11 @@ public class Map implements IMap {
         int z = (int) absolutePosition.z;
 
         return bodyMap[x][y][z];
+    }
+
+    public Vector3 getSize() {
+
+        return size;
     }
 
     public void putAtAbsolute(IWorldBody worldBody, Vector3[] positions) {
@@ -122,8 +125,8 @@ public class Map implements IMap {
         int y = (int) absolutePosition.y;
         int z = (int) absolutePosition.z;
 
-        return x >= 0 && x < width &&
-                y >= 0 && y < length &&
-                z >= 0 && z < height;
+        return x >= 0 && x < size.x &&
+                y >= 0 && y < size.y &&
+                z >= 0 && z < size.z;
     }
 }

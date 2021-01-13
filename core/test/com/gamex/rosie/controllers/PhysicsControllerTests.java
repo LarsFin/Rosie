@@ -35,6 +35,7 @@ public class PhysicsControllerTests {
             mockFactory = mock(TransformationFactory.class);
             Transformation dummyTransformation = mock(Transformation.class);
 
+            when(mockMap.getSize()).thenReturn(new Vector3(2, 2, 2));
             when(mockFactory.build(any(IWorldBody.class), any(Vector3.class))).thenReturn(dummyTransformation);
 
             subject = new PhysicsController(mockMap, mockFactory);
