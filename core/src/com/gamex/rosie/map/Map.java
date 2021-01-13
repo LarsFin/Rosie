@@ -80,6 +80,9 @@ public class Map implements IMap {
 
         for (Vector3 position : currentPositions) {
 
+            if (position == null)
+                continue;
+
             int x = (int) position.x;
             int y = (int) position.y;
             int z = (int) position.z;
