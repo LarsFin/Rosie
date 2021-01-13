@@ -172,11 +172,88 @@ public class TransformControllerTests {
         }
 
         @Test
+        @DisplayName("Move two world bodies with increasing weight when weight is not a consideration")
+        public void moveTwoWorldBodiesWithIncreasingWeightWhenNotConsidered() {
+
+            // Arrange
+            ArrayList<IWorldBody> obstacles = new ArrayList<>();
+            obstacles.add(mockBody2);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
+
+            when(mockBody1.getWeight()).thenReturn(2);
+            when(mockBody2.getWeight()).thenReturn(5);
+
+            Transformation.Considerations[] considerations = { Transformation.Considerations.STATIC };
+
+            // Act
+            subject.applyTransform(mockTransformation, considerations);
+
+            // Assert
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
+        }
+
+        @Test
+        @DisplayName("Move world body which is static when static is not a consideration")
+        public void moveStaticWorldBodyWhenNotConsidered() {
+
+            // Arrange
+            when(mockBody1.isStatic()).thenReturn(true);
+
+            Transformation.Considerations[] considerations = { Transformation.Considerations.WEIGHT };
+
+            // Act
+            subject.applyTransform(mockTransformation, considerations);
+
+            // Assert
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+        }
+
+        @Test
+        @DisplayName("Move two world bodies, where second is static when static is not a consideration")
+        public void moveTwoWorldBodiesWhenSecondIsStaticWhenNotConsidered() {
+
+            // Arrange
+            ArrayList<IWorldBody> obstacles = new ArrayList<>();
+            obstacles.add(mockBody2);
+            when(mockBody1.getObstacles(displacement)).thenReturn(obstacles);
+
+            int wt = 5;
+            when(mockBody1.getWeight()).thenReturn(wt);
+            when(mockBody2.getWeight()).thenReturn(wt);
+
+            when(mockBody2.isStatic()).thenReturn(true);
+
+            Transformation.Considerations[] considerations = { Transformation.Considerations.WEIGHT };
+
+            // Act
+            subject.applyTransform(mockTransformation, considerations);
+
+            // Assert
+            verify(mockMap).putAtRelative(mockBody1, displacement);
+            verify(mockMap).putAtRelative(mockBody2, displacement);
+        }
+
+        @Test
         @DisplayName("Not move world body over bounds of map")
         public void notMoveWorldBodyOverBoundsOfMap() {
 
             // Arrange
             when(mockBody1.isTransformationSafe(displacement)).thenReturn(false);
+
+            // Act
+            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+
+            // Assert
+            verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+        }
+
+        @Test
+        @DisplayName("Not move world body which is static")
+        public void notMoveWorldBodyWhichIsStatic() {
+
+            // Arrange
+            when(mockBody1.isStatic()).thenReturn(true);
 
             // Act
             subject.applyTransform(mockTransformation, Transformation.allConsiderations());
