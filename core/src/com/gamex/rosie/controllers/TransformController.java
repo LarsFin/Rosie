@@ -18,19 +18,22 @@ public class TransformController implements ITransformController {
     private ArrayList<IWorldBody> checkedWorldBodies;
     private final IMap map;
     private final Factory2<TransformationResult, Boolean, List<Transformation>> transformationResultFactory;
-    private final Factory3<Transformation, IWorldBody, IWorldBody, Vector3> transformationFactory;
+    private final Factory2<Transformation, IWorldBody, Vector3> transformationFactory;
+    private final Factory3<Transformation, IWorldBody, IWorldBody, Vector3> chainedTransformationFactory;
 
     public TransformController(IMap map,
                                Factory2<TransformationResult, Boolean, List<Transformation>> transformationResultFactory,
-                               Factory3<Transformation, IWorldBody, IWorldBody, Vector3> transformationFactory) {
+                               Factory2<Transformation, IWorldBody, Vector3> transformationFactory,
+                               Factory3<Transformation, IWorldBody, IWorldBody, Vector3> chainedTransformationFactory) {
 
         checkedWorldBodies = new ArrayList<>();
         this.map = map;
         this.transformationResultFactory = transformationResultFactory;
         this.transformationFactory = transformationFactory;
+        this.chainedTransformationFactory = chainedTransformationFactory;
     }
 
-    public void applyTransform(Transformation transformation, Transformation.Consideration[] considerations) {
+    public TransformationResult applyTransform(Transformation transformation, Transformation.Consideration[] considerations) {
 
         IWorldBody worldBody = transformation.getReactingWorldBody();
         Vector3 displacement = transformation.getDisplacement();
@@ -44,6 +47,8 @@ public class TransformController implements ITransformController {
         }
 
         checkedWorldBodies = new ArrayList<>();
+
+        return null;
     }
 
     private boolean canApplyTransform(IWorldBody worldBody,

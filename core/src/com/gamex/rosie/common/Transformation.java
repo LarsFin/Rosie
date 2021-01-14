@@ -8,16 +8,16 @@ public class Transformation {
     private IWorldBody reactingWorldBody;
     private Vector3 displacement;
 
+    public void Transformation(IWorldBody worldBody, Vector3 displacement) {
+
+        this.reactingWorldBody = worldBody;
+        this.displacement = displacement;
+    }
+
     public void Transformation(IWorldBody initiatingWorldBody, IWorldBody reactingWorldBody, Vector3 displacement) {
 
         this.initiatingWorldBody = initiatingWorldBody;
         this.reactingWorldBody = reactingWorldBody;
-        this.displacement = displacement;
-    }
-
-    public void Transformation(IWorldBody worldBody, Vector3 displacement) {
-
-        this.reactingWorldBody = worldBody;
         this.displacement = displacement;
     }
 

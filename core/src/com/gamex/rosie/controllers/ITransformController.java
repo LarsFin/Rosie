@@ -1,8 +1,9 @@
 package com.gamex.rosie.controllers;
 
 import com.gamex.rosie.common.Transformation;
+import com.gamex.rosie.common.TransformationResult;
 
 public interface ITransformController {
 
-    void applyTransform(Transformation transformation, Transformation.Consideration[] considerations);
+    TransformationResult applyTransform(Transformation transformation, Transformation.Consideration[] considerations);
 }

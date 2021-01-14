@@ -11,6 +11,7 @@ import org.junit.jupiter.api.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class TransformControllerTests {
@@ -20,6 +21,7 @@ public class TransformControllerTests {
     private IMap mockMap;
     private TransformationResultFactory mockTransformationResultFactory;
     private TransformationFactory mockTransformationFactory;
+    private ChainedTransformationFactory mockChainedTransformationFactory;
 
     @BeforeEach
     public void beforeEach() {
@@ -27,8 +29,12 @@ public class TransformControllerTests {
         mockMap = mock(IMap.class);
         mockTransformationResultFactory = mock(TransformationResultFactory.class);
         mockTransformationFactory = mock(TransformationFactory.class);
+        mockChainedTransformationFactory = mock(ChainedTransformationFactory.class);
 
-        subject = new TransformController(mockMap, mockTransformationResultFactory, mockTransformationFactory);
+        subject = new TransformController(mockMap,
+                mockTransformationResultFactory,
+                mockTransformationFactory,
+                mockChainedTransformationFactory);
     }
 
     @Nested
@@ -38,6 +44,8 @@ public class TransformControllerTests {
         private Vector3 displacement;
 
         private Transformation mockTransformation;
+        private Transformation mockAttemptedTransformation;
+        private TransformationResult mockTransformationResult;
         private IWorldBody mockBody1;
         private IWorldBody mockBody2;
 
@@ -47,9 +55,13 @@ public class TransformControllerTests {
             displacement = new Vector3(-1, 0, 0);
 
             mockTransformation = mock(Transformation.class);
+            mockAttemptedTransformation = mock(Transformation.class);
+            mockTransformationResult = mock(TransformationResult.class);
 
             mockBody1 = mock(IWorldBody.class);
             mockBody2 = mock(IWorldBody.class);
+
+            when(mockTransformationFactory.build(mockBody1, displacement)).thenReturn(mockAttemptedTransformation);
 
             when(mockTransformation.getReactingWorldBody()).thenReturn(mockBody1);
             when(mockTransformation.getDisplacement()).thenReturn(displacement);
@@ -59,22 +71,27 @@ public class TransformControllerTests {
         }
 
         @Test
-        @DisplayName("Move single world body")
-        public void moveSingleWorldBody() {
+        @DisplayName("Move single world body and return respective result")
+        public void moveSingleWorldBodyAndReturnResult() {
 
             // Arrange
             when(mockBody1.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move two world bodies with same weight")
-        public void moveTwoWorldBodies() {
+        @DisplayName("Move two world bodies with same weight and return respective result")
+        public void moveTwoWorldBodiesAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -87,17 +104,27 @@ public class TransformControllerTests {
 
             when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move two recursively connected world bodies")
-        public void moveTwoRecursivelyConnectedWorldBodies() {
+        @DisplayName("Move two recursively connected world bodies and return respective result")
+        public void moveTwoRecursivelyConnectedWorldBodiesAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -112,17 +139,27 @@ public class TransformControllerTests {
             obstacles2.add(mockBody1);
             when(mockBody2.getObstacles(displacement)).thenReturn(obstacles2);
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move two world bodies when second is lighter")
-        public void moveTwoWorldBodiesWithDecreasingWeight() {
+        @DisplayName("Move two world bodies when second is lighter and return respective result")
+        public void moveTwoWorldBodiesWithDecreasingWeightAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -134,17 +171,27 @@ public class TransformControllerTests {
 
             when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move world body which is blocked by two other same weight world bodies")
-        public void moveBranchedWorldBodyConnections() {
+        @DisplayName("Move world body which is blocked by two other same weight world bodies and return respective result")
+        public void moveBranchedWorldBodyConnectionsAndReturnResult() {
 
             // Arrange
             IWorldBody mockBody2b = mock(IWorldBody.class);
@@ -168,19 +215,39 @@ public class TransformControllerTests {
             when(mockBody2b.getWeight()).thenReturn(wt);
             when(mockBody3b.getWeight()).thenReturn(wt);
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            Transformation mockAttemptedTransformation3 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2b, displacement))
+                    .thenReturn(mockAttemptedTransformation3);
+
+            Transformation mockAttemptedTransformation4 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody2b, mockBody3b, displacement))
+                    .thenReturn(mockAttemptedTransformation4);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) &&
+                            list.contains(mockAttemptedTransformation3) &&
+                            list.contains(mockAttemptedTransformation4) && list.size() == 4)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
             verify(mockMap).putAtRelative(mockBody2b, displacement);
             verify(mockMap).putAtRelative(mockBody3b, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move two world bodies with increasing weight when weight is not a consideration")
-        public void moveTwoWorldBodiesWithIncreasingWeightWhenNotConsidered() {
+        @DisplayName("Move two world bodies with increasing weight when weight is not a consideration and return respective result")
+        public void moveTwoWorldBodiesWithIncreasingWeightWhenNotConsideredAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -192,33 +259,48 @@ public class TransformControllerTests {
 
             Transformation.Consideration[] considerations = { Transformation.Consideration.STATIC };
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, considerations);
+            TransformationResult result = subject.applyTransform(mockTransformation, considerations);
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move world body which is static when static is not a consideration")
-        public void moveStaticWorldBodyWhenNotConsidered() {
+        @DisplayName("Move world body which is static when static is not a consideration and return respective result")
+        public void moveStaticWorldBodyWhenNotConsideredAndReturnResult() {
 
             // Arrange
             when(mockBody1.isStatic()).thenReturn(true);
 
             Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, considerations);
+            TransformationResult result = subject.applyTransform(mockTransformation, considerations);
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Move two world bodies, where second is static when static is not a consideration")
-        public void moveTwoWorldBodiesWhenSecondIsStaticWhenNotConsidered() {
+        @DisplayName("Move two world bodies, where second is static when static is not a consideration and return respective result")
+        public void moveTwoWorldBodiesWhereSecondIsStaticWhenNotConsideredAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -233,45 +315,65 @@ public class TransformControllerTests {
 
             Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(true), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, considerations);
+            TransformationResult result = subject.applyTransform(mockTransformation, considerations);
 
             // Assert
             verify(mockMap).putAtRelative(mockBody1, displacement);
             verify(mockMap).putAtRelative(mockBody2, displacement);
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Not move world body over bounds of map")
-        public void notMoveWorldBodyOverBoundsOfMap() {
+        @DisplayName("Not move world body over bounds of map and return respective result")
+        public void notMoveWorldBodyOverBoundsOfMapAndReturnResult() {
 
             // Arrange
             when(mockBody1.isTransformationSafe(displacement)).thenReturn(false);
 
+            when(mockTransformationResultFactory.build(eq(false), argThat(list ->
+                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Not move world body which is static")
-        public void notMoveWorldBodyWhichIsStatic() {
+        @DisplayName("Not move world body which is static and return respective result")
+        public void notMoveWorldBodyWhichIsStaticAndReturnResult() {
 
             // Arrange
             when(mockBody1.isStatic()).thenReturn(true);
 
+            when(mockTransformationResultFactory.build(eq(false), argThat(list ->
+                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Not move two world bodies when second is heavier")
-        public void notMoveTwoWorldBodiesWithIncreasingWeight() {
+        @DisplayName("Not move two world bodies when second is heavier and return respective result")
+        public void notMoveTwoWorldBodiesWithIncreasingWeightAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -281,16 +383,26 @@ public class TransformControllerTests {
             when(mockBody1.getWeight()).thenReturn(2);
             when(mockBody2.getWeight()).thenReturn(5);
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(false), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
-        @DisplayName("Not move two world bodies when second is static")
-        public void notMoveTwoWorldBodiesWhenSecondIsStatic() {
+        @DisplayName("Not move two world bodies when second is static and return respective result")
+        public void notMoveTwoWorldBodiesWhenSecondIsStaticAndReturnResult() {
 
             // Arrange
             ArrayList<IWorldBody> obstacles = new ArrayList<>();
@@ -303,11 +415,21 @@ public class TransformControllerTests {
 
             when(mockBody2.isStatic()).thenReturn(true);
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            when(mockTransformationResultFactory.build(eq(false), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result = subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+            assertEquals(mockTransformationResult, result);
         }
 
         @Test
@@ -339,20 +461,45 @@ public class TransformControllerTests {
 
             when(mockBody3.isStatic()).thenReturn(true);
 
+            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation2);
+
+            Transformation mockAttemptedTransformation3 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody1, mockBody2b, displacement))
+                    .thenReturn(mockAttemptedTransformation3);
+
+            Transformation mockAttemptedTransformation4 = mock(Transformation.class);
+            when(mockChainedTransformationFactory.build(mockBody2, mockBody3, displacement))
+                    .thenReturn(mockAttemptedTransformation4);
+
+            when(mockTransformationResultFactory.build(eq(false), argThat(list ->
+                    list.contains(mockAttemptedTransformation) &&
+                            list.contains(mockAttemptedTransformation2) &&
+                            list.contains(mockAttemptedTransformation3) &&
+                            list.contains(mockAttemptedTransformation4) && list.size() == 2)))
+                    .thenReturn(mockTransformationResult);
+
             // Act
-            subject.applyTransform(mockTransformation, Transformation.allConsiderations());
+            TransformationResult result =  subject.applyTransform(mockTransformation, Transformation.allConsiderations());
 
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
+            assertEquals(mockTransformationResult, result);
         }
     }
 
     private interface TransformationResultFactory extends Factory2<TransformationResult, Boolean, List<Transformation>> {
 
-        TransformationResult build(Boolean successful, List<Transformation> appliedTransformations);
+        TransformationResult build(Boolean successful, List<Transformation> attemptedTransformations);
     }
 
-    private interface TransformationFactory extends Factory3<Transformation, IWorldBody, IWorldBody, Vector3> {
+    private interface TransformationFactory extends Factory2<Transformation, IWorldBody, Vector3> {
+
+        Transformation build(IWorldBody worldBody, Vector3 displacement);
+    }
+
+    private interface ChainedTransformationFactory extends Factory3<Transformation, IWorldBody, IWorldBody, Vector3> {
 
         Transformation build(IWorldBody initiatingWorldBody, IWorldBody reactingWorldBody, Vector3 displacement);
     }

@@ -6,12 +6,12 @@ import java.util.List;
 public class TransformationResult {
 
     private final boolean successful;
-    private final List<Transformation> appliedTransformations;
+    private final List<Transformation> attemptedTransformations;
 
-    public TransformationResult(boolean successful, List<Transformation> appliedTransformations) {
+    public TransformationResult(boolean successful, List<Transformation> attemptedTransformations) {
 
         this.successful = successful;
-        this.appliedTransformations = new ArrayList<>();
+        this.attemptedTransformations = new ArrayList<>();
     }
 
     public boolean wasSuccessful() {
@@ -19,8 +19,8 @@ public class TransformationResult {
         return successful;
     }
 
-    public List<Transformation> getAppliedTransformations() {
+    public List<Transformation> getAttemptedTransformations() {
 
-        return appliedTransformations;
+        return attemptedTransformations;
     }
 }
