@@ -21,7 +21,6 @@ public class TransformControllerTests {
     private IMap mockMap;
     private TransformationResultFactory mockTransformationResultFactory;
     private TransformationFactory mockTransformationFactory;
-    private ChainedTransformationFactory mockChainedTransformationFactory;
 
     @BeforeEach
     public void beforeEach() {
@@ -29,12 +28,10 @@ public class TransformControllerTests {
         mockMap = mock(IMap.class);
         mockTransformationResultFactory = mock(TransformationResultFactory.class);
         mockTransformationFactory = mock(TransformationFactory.class);
-        mockChainedTransformationFactory = mock(ChainedTransformationFactory.class);
 
         subject = new TransformController(mockMap,
                 mockTransformationResultFactory,
-                mockTransformationFactory,
-                mockChainedTransformationFactory);
+                mockTransformationFactory);
     }
 
     @Nested
@@ -44,7 +41,6 @@ public class TransformControllerTests {
         private Vector3 displacement;
 
         private Transformation mockTransformation;
-        private Transformation mockAttemptedTransformation;
         private TransformationResult mockTransformationResult;
         private IWorldBody mockBody1;
         private IWorldBody mockBody2;
@@ -55,13 +51,10 @@ public class TransformControllerTests {
             displacement = new Vector3(-1, 0, 0);
 
             mockTransformation = mock(Transformation.class);
-            mockAttemptedTransformation = mock(Transformation.class);
             mockTransformationResult = mock(TransformationResult.class);
 
             mockBody1 = mock(IWorldBody.class);
             mockBody2 = mock(IWorldBody.class);
-
-            when(mockTransformationFactory.build(mockBody1, displacement)).thenReturn(mockAttemptedTransformation);
 
             when(mockTransformation.getReactingWorldBody()).thenReturn(mockBody1);
             when(mockTransformation.getDisplacement()).thenReturn(displacement);
@@ -78,7 +71,7 @@ public class TransformControllerTests {
             when(mockBody1.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    list.contains(mockTransformation) && list.size() == 1)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -104,13 +97,13 @@ public class TransformControllerTests {
 
             when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -139,13 +132,13 @@ public class TransformControllerTests {
             obstacles2.add(mockBody1);
             when(mockBody2.getObstacles(displacement)).thenReturn(obstacles2);
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -171,13 +164,13 @@ public class TransformControllerTests {
 
             when(mockBody2.getObstacles(displacement)).thenReturn(new ArrayList<>());
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -215,23 +208,23 @@ public class TransformControllerTests {
             when(mockBody2b.getWeight()).thenReturn(wt);
             when(mockBody3b.getWeight()).thenReturn(wt);
 
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
+
             Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+            when(mockTransformationFactory.build(mockBody1, mockBody2b, displacement))
                     .thenReturn(mockAttemptedTransformation2);
 
             Transformation mockAttemptedTransformation3 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2b, displacement))
+            when(mockTransformationFactory.build(mockBody2b, mockBody3b, displacement))
                     .thenReturn(mockAttemptedTransformation3);
 
-            Transformation mockAttemptedTransformation4 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody2b, mockBody3b, displacement))
-                    .thenReturn(mockAttemptedTransformation4);
-
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) &&
                             list.contains(mockAttemptedTransformation2) &&
-                            list.contains(mockAttemptedTransformation3) &&
-                            list.contains(mockAttemptedTransformation4) && list.size() == 4)))
+                            list.contains(mockAttemptedTransformation3) && list.size() == 4)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -259,13 +252,13 @@ public class TransformControllerTests {
 
             Transformation.Consideration[] considerations = { Transformation.Consideration.STATIC };
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -287,7 +280,7 @@ public class TransformControllerTests {
             Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    list.contains(mockTransformation) && list.size() == 1)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -315,13 +308,13 @@ public class TransformControllerTests {
 
             Transformation.Consideration[] considerations = { Transformation.Consideration.WEIGHT };
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(true), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -341,7 +334,7 @@ public class TransformControllerTests {
             when(mockBody1.isTransformationSafe(displacement)).thenReturn(false);
 
             when(mockTransformationResultFactory.build(eq(false), argThat(list ->
-                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    list.contains(mockTransformation) && list.size() == 1)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -360,7 +353,7 @@ public class TransformControllerTests {
             when(mockBody1.isStatic()).thenReturn(true);
 
             when(mockTransformationResultFactory.build(eq(false), argThat(list ->
-                    list.contains(mockAttemptedTransformation) && list.size() == 1)))
+                    list.contains(mockTransformation) && list.size() == 1)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -383,13 +376,13 @@ public class TransformControllerTests {
             when(mockBody1.getWeight()).thenReturn(2);
             when(mockBody2.getWeight()).thenReturn(5);
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(false), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -415,13 +408,13 @@ public class TransformControllerTests {
 
             when(mockBody2.isStatic()).thenReturn(true);
 
-            Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
-                    .thenReturn(mockAttemptedTransformation2);
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
 
             when(mockTransformationResultFactory.build(eq(false), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) && list.size() == 2)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -434,8 +427,8 @@ public class TransformControllerTests {
 
         @Test
         @DisplayName("Not move world body which is blocked by two different world bodies, one of which blocked by " +
-                "a static world body")
-        public void notMoveBranchedWorldBodyConnectionsWhenOnePathIsStatic() {
+                "a static world body and return respective result")
+        public void notMoveBranchedWorldBodyConnectionsWhenOnePathIsStaticAndReturnResult() {
 
             // Arrange
             IWorldBody mockBody2b = mock(IWorldBody.class);
@@ -461,23 +454,18 @@ public class TransformControllerTests {
 
             when(mockBody3.isStatic()).thenReturn(true);
 
+            Transformation mockAttemptedTransformation1 = mock(Transformation.class);
+            when(mockTransformationFactory.build(mockBody1, mockBody2, displacement))
+                    .thenReturn(mockAttemptedTransformation1);
+
             Transformation mockAttemptedTransformation2 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2, displacement))
+            when(mockTransformationFactory.build(mockBody2, mockBody3, displacement))
                     .thenReturn(mockAttemptedTransformation2);
 
-            Transformation mockAttemptedTransformation3 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody1, mockBody2b, displacement))
-                    .thenReturn(mockAttemptedTransformation3);
-
-            Transformation mockAttemptedTransformation4 = mock(Transformation.class);
-            when(mockChainedTransformationFactory.build(mockBody2, mockBody3, displacement))
-                    .thenReturn(mockAttemptedTransformation4);
-
             when(mockTransformationResultFactory.build(eq(false), argThat(list ->
-                    list.contains(mockAttemptedTransformation) &&
-                            list.contains(mockAttemptedTransformation2) &&
-                            list.contains(mockAttemptedTransformation3) &&
-                            list.contains(mockAttemptedTransformation4) && list.size() == 2)))
+                    list.contains(mockTransformation) &&
+                            list.contains(mockAttemptedTransformation1) &&
+                            list.contains(mockAttemptedTransformation2) && list.size() == 3)))
                     .thenReturn(mockTransformationResult);
 
             // Act
@@ -494,12 +482,7 @@ public class TransformControllerTests {
         TransformationResult build(Boolean successful, List<Transformation> attemptedTransformations);
     }
 
-    private interface TransformationFactory extends Factory2<Transformation, IWorldBody, Vector3> {
-
-        Transformation build(IWorldBody worldBody, Vector3 displacement);
-    }
-
-    private interface ChainedTransformationFactory extends Factory3<Transformation, IWorldBody, IWorldBody, Vector3> {
+    private interface TransformationFactory extends Factory3<Transformation, IWorldBody, IWorldBody, Vector3> {
 
         Transformation build(IWorldBody initiatingWorldBody, IWorldBody reactingWorldBody, Vector3 displacement);
     }
