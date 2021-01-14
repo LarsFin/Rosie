@@ -1,7 +1,7 @@
 package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
-import com.gamex.rosie.common.Factories.Factory;
+import com.gamex.rosie.common.Factories.Factory2;
 import com.gamex.rosie.common.IWorldBody;
 import com.gamex.rosie.common.Transformation;
 import com.gamex.rosie.common.WorldConstants._3dDirection;
@@ -16,9 +16,9 @@ public class PhysicsController implements IPhysicsController {
 
     private final _3dDirection gravityDirection = _3dDirection.DOWN;
     private final IMap map;
-    private final Factory<Transformation, IWorldBody, Vector3> transformationFactory;
+    private final Factory2<Transformation, IWorldBody, Vector3> transformationFactory;
 
-    public PhysicsController(IMap map, Factory<Transformation, IWorldBody, Vector3> transformationFactory) {
+    public PhysicsController(IMap map, Factory2<Transformation, IWorldBody, Vector3> transformationFactory) {
 
         this.map = map;
         this.transformationFactory = transformationFactory;
@@ -60,7 +60,7 @@ public class PhysicsController implements IPhysicsController {
 
         for (Transformation transformation : transformations) {
 
-            if (transformation.getWorldBody().equals(worldBody))
+            if (transformation.getReactingWorldBody().equals(worldBody))
                 return true;
         }
 

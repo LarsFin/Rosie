@@ -1,12 +1,15 @@
 package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
+import com.gamex.rosie.common.Factories.*;
 import com.gamex.rosie.common.IWorldBody;
 import com.gamex.rosie.common.Transformation;
+import com.gamex.rosie.common.TransformationResult;
 import com.gamex.rosie.map.IMap;
 import org.junit.jupiter.api.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 
@@ -15,13 +18,17 @@ public class TransformControllerTests {
     private TransformController subject;
 
     private IMap mockMap;
+    private TransformationResultFactory mockTransformationResultFactory;
+    private TransformationFactory mockTransformationFactory;
 
     @BeforeEach
     public void beforeEach() {
 
         mockMap = mock(IMap.class);
+        mockTransformationResultFactory = mock(TransformationResultFactory.class);
+        mockTransformationFactory = mock(TransformationFactory.class);
 
-        subject = new TransformController(mockMap);
+        subject = new TransformController(mockMap, mockTransformationResultFactory, mockTransformationFactory);
     }
 
     @Nested
@@ -44,7 +51,7 @@ public class TransformControllerTests {
             mockBody1 = mock(IWorldBody.class);
             mockBody2 = mock(IWorldBody.class);
 
-            when(mockTransformation.getWorldBody()).thenReturn(mockBody1);
+            when(mockTransformation.getReactingWorldBody()).thenReturn(mockBody1);
             when(mockTransformation.getDisplacement()).thenReturn(displacement);
 
             when(mockBody1.isTransformationSafe(displacement)).thenReturn(true);
@@ -338,5 +345,15 @@ public class TransformControllerTests {
             // Assert
             verify(mockMap, times(0)).putAtRelative(any(IWorldBody.class), any(Vector3.class));
         }
+    }
+
+    private interface TransformationResultFactory extends Factory2<TransformationResult, Boolean, List<Transformation>> {
+
+        TransformationResult build(Boolean successful, List<Transformation> appliedTransformations);
+    }
+
+    private interface TransformationFactory extends Factory3<Transformation, IWorldBody, IWorldBody, Vector3> {
+
+        Transformation build(IWorldBody initiatingWorldBody, IWorldBody reactingWorldBody, Vector3 displacement);
     }
 }

@@ -1,7 +1,7 @@
 package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
-import com.gamex.rosie.common.Factories.Factory;
+import com.gamex.rosie.common.Factories.Factory2;
 import com.gamex.rosie.common.IWorldBody;
 import com.gamex.rosie.common.Transformation;
 import com.gamex.rosie.map.IMap;
@@ -53,7 +53,7 @@ public class PhysicsControllerTests {
             when(mockMap.getAtAbsolute(Vector3.Zero)).thenReturn(body1);
             when(mockMap.getAtAbsolute(Vector3.X)).thenReturn(body2);
 
-            when(mockTransformation.getWorldBody()).thenReturn(body1);
+            when(mockTransformation.getReactingWorldBody()).thenReturn(body1);
 
             // Act
             List<Transformation> transformations = subject.getGravityTransformations();
@@ -85,10 +85,10 @@ public class PhysicsControllerTests {
             Transformation transformation3 = mock(Transformation.class);
             Transformation transformation4 = mock(Transformation.class);
 
-            when(transformation1.getWorldBody()).thenReturn(body1);
-            when(transformation2.getWorldBody()).thenReturn(body2);
-            when(transformation3.getWorldBody()).thenReturn(body3);
-            when(transformation4.getWorldBody()).thenReturn(body4);
+            when(transformation1.getReactingWorldBody()).thenReturn(body1);
+            when(transformation2.getReactingWorldBody()).thenReturn(body2);
+            when(transformation3.getReactingWorldBody()).thenReturn(body3);
+            when(transformation4.getReactingWorldBody()).thenReturn(body4);
 
             when(mockFactory.build(body1, subject.getGravity())).thenReturn(transformation1);
             when(mockFactory.build(body2, subject.getGravity())).thenReturn(transformation2);
@@ -138,7 +138,7 @@ public class PhysicsControllerTests {
             when(mockMap.getAtAbsolute(Vector3.Zero)).thenReturn(mockBody);
             when(mockMap.getAtAbsolute(Vector3.X)).thenReturn(mockBody);
 
-            when(mockTransformation.getWorldBody()).thenReturn(mockBody);
+            when(mockTransformation.getReactingWorldBody()).thenReturn(mockBody);
 
             // Act
             List<Transformation> transformations = subject.getGravityTransformations();
@@ -149,7 +149,7 @@ public class PhysicsControllerTests {
         }
     }
 
-    private interface TransformationFactory extends Factory<Transformation, IWorldBody, Vector3> {
+    private interface TransformationFactory extends Factory2<Transformation, IWorldBody, Vector3> {
 
         Transformation build(IWorldBody worldBody, Vector3 displacement);
     }

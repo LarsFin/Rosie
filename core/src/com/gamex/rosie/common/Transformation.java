@@ -4,18 +4,31 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Transformation {
 
-    private IWorldBody worldBody;
+    private IWorldBody initiatingWorldBody;
+    private IWorldBody reactingWorldBody;
     private Vector3 displacement;
 
-    public void Transformation(IWorldBody worldBody, Vector3 displacement) {
+    public void Transformation(IWorldBody initiatingWorldBody, IWorldBody reactingWorldBody, Vector3 displacement) {
 
-        this.worldBody = worldBody;
+        this.initiatingWorldBody = initiatingWorldBody;
+        this.reactingWorldBody = reactingWorldBody;
         this.displacement = displacement;
     }
 
-    public IWorldBody getWorldBody() {
+    public void Transformation(IWorldBody worldBody, Vector3 displacement) {
 
-        return worldBody;
+        this.reactingWorldBody = worldBody;
+        this.displacement = displacement;
+    }
+
+    public IWorldBody getInitiatingWorldBody() {
+
+        return initiatingWorldBody;
+    }
+
+    public IWorldBody getReactingWorldBody() {
+
+        return reactingWorldBody;
     }
 
     public Vector3 getDisplacement() {
