@@ -1,10 +1,14 @@
 package com.gamex.rosie.controllers;
 
 import com.badlogic.gdx.math.Vector3;
+import com.gamex.rosie.common.Factories.Factory2;
+import com.gamex.rosie.common.IWorldBody;
+import com.gamex.rosie.common.Transformation;
 import com.gamex.rosie.common.WorldConstants._3dDirection;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -14,15 +18,23 @@ import org.junit.jupiter.params.provider.ArgumentsSource;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 public class PlayerControllerTests {
 
     private PlayerController subject;
 
+    private IWorldBody mockBody;
+    private TransformationFactory mockTransformationFactory;
+
     @BeforeEach
     public void beforeEach() {
 
-        subject = new PlayerController();
+        mockBody = mock(IWorldBody.class);
+        mockTransformationFactory = mock(TransformationFactory.class);
+
+        subject = new PlayerController(mockBody, mockTransformationFactory);
     }
 
     @Nested
@@ -79,6 +91,28 @@ public class PlayerControllerTests {
     }
 
     @Nested
+    @DisplayName("Get Transformation Tests")
+    public class GetTransformationTests {
+
+        @Test
+        @DisplayName("Return Transformation with player controlled world body and displacement vector")
+        public void returnTransformation() {
+
+            // Arrange
+            Vector3 displacement = Vector3.Y;
+            Transformation expectedTransformation = mock(Transformation.class);
+
+            when(mockTransformationFactory.build(mockBody, displacement)).thenReturn(expectedTransformation);
+
+            // Act
+            Transformation actualTransformation = subject.getTransformation(displacement);
+
+            // Assert
+            assertEquals(expectedTransformation, actualTransformation);
+        }
+    }
+
+    @Nested
     @DisplayName("Resolve Movement Direction Tests")
     public class ResolveMovementDirectionTests {
 
@@ -115,5 +149,10 @@ public class PlayerControllerTests {
                     Arguments.of(-1, -1, _3dDirection.SOUTH)
             );
         }
+    }
+
+    private interface TransformationFactory extends Factory2<Transformation, IWorldBody, Vector3> {
+
+        Transformation build(IWorldBody worldBody, Vector3 displacement);
     }
 }
