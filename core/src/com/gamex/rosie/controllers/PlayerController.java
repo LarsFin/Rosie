@@ -37,7 +37,7 @@ public class PlayerController implements IPlayerController {
 
     public Transformation getTransformation(Vector3 displacement) {
 
-        return null;
+        return transformationFactory.build(controlledWorldBody, displacement);
     }
 
     public _3dDirection resolveMovementDirection(int horizontalInputFeed, int verticalInputFeed) {
